@@ -8,6 +8,8 @@ typedef struct
 {
   int         cell_size;
   int margin_cell_count;
+  int         col_count;
+  int         row_count;
   SDL_FRect  outer_rect;
   SDL_FRect  inner_rect;
 } Grid;

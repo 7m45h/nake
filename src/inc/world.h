@@ -6,6 +6,7 @@
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 
+#include "apple.h"
 #include "grid.h"
 
 typedef struct
@@ -17,6 +18,7 @@ typedef struct
   SDL_Event        event;
   bool          evolving;
   Grid              grid;
+  Apple            apple;
 } World;
 
 World* WORLD_form(const char* title, int w, int h);
