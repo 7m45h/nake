@@ -6,6 +6,8 @@
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 
+#include "grid.h"
+
 typedef struct
 {
   int              width;
@@ -14,6 +16,7 @@ typedef struct
   SDL_Renderer* renderer;
   SDL_Event        event;
   bool          evolving;
+  Grid              grid;
 } World;
 
 World* WORLD_form(const char* title, int w, int h);

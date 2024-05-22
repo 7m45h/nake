@@ -8,11 +8,17 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "inc/grid.h"
 #include "inc/logger.h"
 #include "inc/world.h"
 
+#define WORLD_CELL_SIZE   8
+#define WORLD_GRID_MARGIN 4
+
 static void world_init(World* world)
 {
+  GRID_form(&world->grid, world->width, world->height, WORLD_CELL_SIZE, WORLD_GRID_MARGIN);
+
   world->evolving = true;
 }
 
@@ -39,6 +45,18 @@ static void world_handle_events(World* world)
         break;
       }
       break;
+
+      case SDL_WINDOWEVENT:
+      switch (world->event.window.event)
+      {
+        case SDL_WINDOWEVENT_RESIZED:
+        case SDL_WINDOWEVENT_SIZE_CHANGED:
+        world->width  = world->event.window.data1;
+        world->height = world->event.window.data2;
+        GRID_handle_world_resize(&world->grid, world->width, world->height);
+        break;
+      }
+      break;
     }
   }
 }
@@ -47,6 +65,8 @@ static void world_render(World* world)
 {
   SDL_SetRenderDrawColor(world->renderer, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(world->renderer);
+
+  GRID_render(&world->grid, world->renderer);
 
   SDL_RenderPresent(world->renderer);
 }
