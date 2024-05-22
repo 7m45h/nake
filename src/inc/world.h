@@ -9,6 +9,9 @@
 #include "apple.h"
 #include "grid.h"
 
+#define COLOR_FG 0x00, 0x00, 0x00
+#define COLOR_BG 0x00, 0xb1, 0x40
+
 typedef struct
 {
   int              width;

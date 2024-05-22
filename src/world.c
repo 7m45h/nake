@@ -13,12 +13,13 @@
 #include "inc/logger.h"
 #include "inc/world.h"
 
-#define WORLD_CELL_SIZE   8
-#define WORLD_GRID_MARGIN 2
+#define WORLD_CELL_SIZE     8
+#define WORLD_GRID_MARGIN_X 4
+#define WORLD_GRID_MARGIN_Y 8
 
 static void world_init(World* world)
 {
-  GRID_form(&world->grid, world->width, world->height, WORLD_CELL_SIZE, WORLD_GRID_MARGIN);
+  GRID_form(&world->grid, world->width, world->height, WORLD_CELL_SIZE, WORLD_GRID_MARGIN_X, WORLD_GRID_MARGIN_Y);
   APPLE_init(&world->apple, &world->grid);
 
   world->evolving = true;
@@ -70,7 +71,7 @@ static void world_handle_events(World* world)
 
 static void world_render(World* world)
 {
-  SDL_SetRenderDrawColor(world->renderer, 0x00, 0xb1, 0x40, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(world->renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(world->renderer);
 
   GRID_render(&world->grid, world->renderer);

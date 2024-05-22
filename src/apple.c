@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "inc/apple.h"
+#include "inc/world.h"
 
 void APPLE_init(Apple* apple, Grid* grid)
 {
@@ -20,6 +21,6 @@ void APPLE_set_random_position(Apple* apple, Grid* grid)
 
 void APPLE_render(Apple* apple, SDL_Renderer* renderer)
 {
-  SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(renderer, apple);
 }
