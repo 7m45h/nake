@@ -11,6 +11,7 @@
 #include "inc/apple.h"
 #include "inc/grid.h"
 #include "inc/logger.h"
+#include "inc/nake.h"
 #include "inc/world.h"
 
 #define WORLD_CELL_SIZE     8
@@ -21,6 +22,7 @@ static void world_init(World* world)
 {
   GRID_form(&world->grid, world->width, world->height, WORLD_CELL_SIZE, WORLD_GRID_MARGIN_X, WORLD_GRID_MARGIN_Y);
   APPLE_init(&world->apple, &world->grid);
+  NAKE_init(&world->nake, &world->grid);
 
   world->evolving = true;
 }
@@ -47,8 +49,8 @@ static void world_handle_events(World* world)
         world->evolving = false;
         break;
 
-        case SDLK_t:
-        APPLE_set_random_position(&world->apple, &world->grid);
+        default:
+        world->crnt_key = world->event.key.keysym.sym;
         break;
       }
       break;
@@ -69,6 +71,11 @@ static void world_handle_events(World* world)
   }
 }
 
+static void world_update(World* world)
+{
+  NAKE_update(&world->nake, &world->grid, world->crnt_key);
+}
+
 static void world_render(World* world)
 {
   SDL_SetRenderDrawColor(world->renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
@@ -76,6 +83,7 @@ static void world_render(World* world)
 
   GRID_render(&world->grid, world->renderer);
   APPLE_render(&world->apple, world->renderer);
+  NAKE_render(&world->nake, world->renderer);
 
   SDL_RenderPresent(world->renderer);
 }
@@ -132,6 +140,7 @@ void WORLD_evolve(World* world)
   while (world->evolving)
   {
     world_handle_events(world);
+    world_update(world);
     world_render(world);
   }
 
