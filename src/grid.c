@@ -53,7 +53,7 @@ void GRID_render(Grid* grid, SDL_Renderer* renderer)
   SDL_RenderFillRectF(renderer, &grid->inner_rect);
 
   // draw grid lines
-  // SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, SDL_ALPHA_OPAQUE);
+  // SDL_SetRenderDrawColor(renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   // float border_x = grid->inner_rect.x + grid->inner_rect.w;
   // float border_y = grid->inner_rect.y + grid->inner_rect.h;
   // float start_x  = 0;
