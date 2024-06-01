@@ -37,7 +37,7 @@ static void world_init(World* world)
   world->evolving = true;
 }
 
-static void world_deinit(World* world)
+static void world_deinit(void)
 {
   LOGG("world_deinit");
 }
@@ -162,7 +162,7 @@ void WORLD_evolve(World* world)
     }
   }
 
-  world_deinit(world);
+  world_deinit();
 }
 
 void WORLD_destroy(World* world)
