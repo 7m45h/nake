@@ -104,6 +104,13 @@ void NAKE_update(Nake* nake, Grid* grid, SDL_Keycode crnt_key)
     c_position.y    = nake->tail[i].y;
     nake->tail[i].x = p_position.x;
     nake->tail[i].y = p_position.y;
+
+    if (nake->rect.x == nake->tail[i].x && nake->rect.y == nake->tail[i].y)
+    {
+      LOGG("touch");
+      nake->score = i;
+    }
+
     p_position.x    = c_position.x;
     p_position.y    = c_position.y;
   }
