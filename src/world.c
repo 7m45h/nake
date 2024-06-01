@@ -84,6 +84,11 @@ static void world_handle_events(World* world)
 static void world_update(World* world)
 {
   NAKE_update(&world->nake, &world->grid, world->crnt_key);
+  if (world->nake.rect.x == world->apple.x && world->nake.rect.y == world->apple.y)
+  {
+    APPLE_set_random_position(&world->apple, &world->grid);
+    world->nake.score++;
+  }
 }
 
 static void world_render(World* world)

@@ -60,7 +60,7 @@ void NAKE_update(Nake* nake, Grid* grid, SDL_Keycode crnt_key)
 
   if (nake->rect.x < grid->inner_rect.x)
   {
-    nake->rect.x = grid->inner_rect.w - grid->cell_size;
+    nake->rect.x = grid->inner_rect.x + grid->inner_rect.w - grid->cell_size;
   }
   else if ((nake->rect.x + grid->cell_size) > (grid->inner_rect.x + grid->inner_rect.w))
   {
@@ -69,7 +69,7 @@ void NAKE_update(Nake* nake, Grid* grid, SDL_Keycode crnt_key)
 
   if (nake->rect.y < grid->inner_rect.y)
   {
-    nake->rect.y = grid->inner_rect.h - grid->cell_size;
+    nake->rect.y = grid->inner_rect.y + grid->inner_rect.h - grid->cell_size;
   }
   else if ((nake->rect.y + grid->cell_size) > (grid->inner_rect.y + grid->inner_rect.h))
   {
