@@ -32,14 +32,20 @@ static void world_init(World* world)
 {
   GRID_form(&world->grid, world->width, world->height, WORLD_CELL_SIZE, WORLD_GRID_MARGIN_X, WORLD_GRID_MARGIN_Y);
   APPLE_init(&world->apple, &world->grid);
-  NAKE_init(&world->nake, &world->grid);
+
+  int nake_status = NAKE_init(&world->nake, &world->grid);
+  if (nake_status != 0)
+  {
+    LOGG("NAKE_init failed");
+    return;
+  }
 
   world->evolving = true;
 }
 
-static void world_deinit(void)
+static void world_deinit(World* world)
 {
-  LOGG("world_deinit");
+  NAKE_deinit(&world->nake);
 }
 
 static void world_handle_events(World* world)
@@ -87,7 +93,7 @@ static void world_update(World* world)
   if (world->nake.rect.x == world->apple.x && world->nake.rect.y == world->apple.y)
   {
     APPLE_set_random_position(&world->apple, &world->grid);
-    world->nake.score++;
+    NAKE_ate_apple(&world->nake);
   }
 }
 
@@ -167,7 +173,7 @@ void WORLD_evolve(World* world)
     }
   }
 
-  world_deinit();
+  world_deinit(world);
 }
 
 void WORLD_destroy(World* world)
