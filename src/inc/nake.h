@@ -14,6 +14,7 @@ typedef struct
   SDL_FRect        rect;
   SDL_FPoint p_position;
   SDL_Keycode direction;
+  int           p_score;
   int             score;
   int      max_tail_len;
   Tail*            tail;

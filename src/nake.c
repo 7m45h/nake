@@ -23,7 +23,8 @@ int NAKE_init(Nake* nake, Grid* grid)
 
   nake->direction = SDLK_LEFT;
 
-  nake->score        = 0;
+  nake->p_score      = -1;
+  nake->score        =  0;
   nake->max_tail_len = INIT_NAKE_TAIL_ALLOC;
   nake->tail         = malloc(sizeof(Tail) * nake->max_tail_len);
   if (nake->tail == NULL)
