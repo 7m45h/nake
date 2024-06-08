@@ -10,6 +10,7 @@
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 
+#include "inc/apple.h"
 #include "inc/logger.h"
 #include "inc/world.h"
 
@@ -40,6 +41,8 @@ static void world_init(void)
     LOGG(IMG_GetError());
     return;
   }
+
+  APPLE_init();
 
   world.evolving = true;
 }
@@ -81,6 +84,8 @@ static void world_render(void)
   SDL_RenderCopy(world.renderer, world.green_tile, NULL, &world.window_dimensions);
   SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &world.grid.outer_rect);
   SDL_RenderCopyF(world.renderer, world.green_tile, NULL, &world.grid.inner_rect);
+
+  APPLE_render();
 
   SDL_RenderPresent(world.renderer);
 }
