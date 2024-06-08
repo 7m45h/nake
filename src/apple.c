@@ -20,6 +20,11 @@ void APPLE_set_random_position(void)
   apple.y = ((rand() % world.grid.row_count) * world.grid.cell_size) + world.grid.inner_rect.y;
 }
 
+SDL_FRect* APPLE_get_position(void)
+{
+  return &apple;
+}
+
 void APPLE_render(void)
 {
   SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &apple);

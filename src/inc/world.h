@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -26,6 +27,7 @@ typedef struct
   SDL_Window*         window;
   SDL_Renderer*     renderer;
   SDL_Event            event;
+  SDL_Keycode       crnt_key;
   bool              evolving;
   Grid                  grid;
 

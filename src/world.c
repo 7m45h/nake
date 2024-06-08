@@ -12,6 +12,7 @@
 
 #include "inc/apple.h"
 #include "inc/logger.h"
+#include "inc/nake.h"
 #include "inc/world.h"
 
 #define BLACK_TILE_IMG_PATH "./assets/black_tile_x8.png"
@@ -42,6 +43,13 @@ static void world_init(void)
     return;
   }
 
+  int nake_status = NAKE_init();
+  if (nake_status != 0)
+  {
+    LOGG("NAKE_init failed");
+    return;
+  }
+
   APPLE_init();
 
   world.evolving = true;
@@ -51,6 +59,8 @@ static void world_deinit(void)
 {
   SDL_DestroyTexture(world.black_tile);
   SDL_DestroyTexture(world.green_tile);
+
+  NAKE_deinit();
 
   LOGG("world deinit");
 }
@@ -71,6 +81,10 @@ static void world_handle_events(void)
         case SDLK_q:
         world.evolving = false;
         break;
+
+        default:
+        world.crnt_key = world.event.key.keysym.sym;
+        break;
       }
       break;
     }
@@ -86,6 +100,7 @@ static void world_render(void)
   SDL_RenderCopyF(world.renderer, world.green_tile, NULL, &world.grid.inner_rect);
 
   APPLE_render();
+  NAKE_render();
 
   SDL_RenderPresent(world.renderer);
 }
@@ -174,6 +189,11 @@ void WORLD_evolve(void)
     frame_start_time = SDL_GetTicks64();
 
     world_handle_events();
+    NAKE_update();
+    if (NAKE_eat_apple(APPLE_get_position()))
+    {
+      APPLE_set_random_position();
+    }
     world_render();
 
     crnt_frame_time = SDL_GetTicks64() - frame_start_time;
