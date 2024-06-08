@@ -79,11 +79,13 @@ static void world_render(void)
   SDL_RenderClear(world.renderer);
 
   SDL_RenderCopy(world.renderer, world.green_tile, NULL, &world.window_dimensions);
+  SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &world.grid.outer_rect);
+  SDL_RenderCopyF(world.renderer, world.green_tile, NULL, &world.grid.inner_rect);
 
   SDL_RenderPresent(world.renderer);
 }
 
-int WORLD_form(const char* title, int win_w, int win_h)
+int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_mx, int grid_my)
 {
   int sdl_status = SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
   if (sdl_status != 0)
@@ -123,6 +125,35 @@ int WORLD_form(const char* title, int win_w, int win_h)
     SDL_Quit();
     return 1;
   }
+
+  // init world grid
+  world.grid.cell_size = cell_size;
+  world.grid.margin_x  = grid_mx;
+  world.grid.margin_y  = grid_my;
+
+  int margin_x_size        = world.grid.margin_x * world.grid.cell_size;
+  int margin_y_size        = world.grid.margin_y * world.grid.cell_size;
+  int margin_x_size_double = margin_x_size * 2;
+  int margin_y_size_double = margin_y_size * 2;
+
+  win_w -= margin_x_size_double;
+  win_h -= margin_y_size_double;
+
+  world.grid.col_count = win_w / world.grid.cell_size;
+  world.grid.row_count = win_h / world.grid.cell_size;
+
+  world.grid.outer_rect.w = world.grid.cell_size * world.grid.col_count;
+  world.grid.outer_rect.h = world.grid.cell_size * world.grid.row_count;
+  world.grid.outer_rect.x = margin_x_size + (win_w - world.grid.outer_rect.w) * 0.5;
+  world.grid.outer_rect.y = margin_y_size + (win_h - world.grid.outer_rect.h) * 0.5;
+
+  world.grid.inner_rect.x = world.grid.outer_rect.x + world.grid.cell_size;
+  world.grid.inner_rect.y = world.grid.outer_rect.y + world.grid.cell_size;
+  world.grid.inner_rect.w = world.grid.outer_rect.w - (world.grid.cell_size * 2);
+  world.grid.inner_rect.h = world.grid.outer_rect.h - (world.grid.cell_size * 2);
+
+  world.grid.col_count -= 2; // remove border cells
+  world.grid.row_count -= 2; // remove border cells
 
   world.evolving = false;
 

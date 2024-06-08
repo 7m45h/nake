@@ -11,11 +11,23 @@
 
 typedef struct
 {
+  int        cell_size;
+  int         margin_x;
+  int         margin_y;
+  int        col_count;
+  int        row_count;
+  SDL_FRect outer_rect;
+  SDL_FRect inner_rect;
+} Grid;
+
+typedef struct
+{
   SDL_Rect window_dimensions;
   SDL_Window*         window;
   SDL_Renderer*     renderer;
   SDL_Event            event;
   bool              evolving;
+  Grid                  grid;
 
   SDL_Texture* black_tile;
   SDL_Texture* green_tile;
@@ -23,6 +35,6 @@ typedef struct
 
 extern World world;
 
-int  WORLD_form(const char* title, int win_w, int win_h);
+int  WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_mx, int grid_my);
 void WORLD_evolve(void);
 void WORLD_destroy(void);

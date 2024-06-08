@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include "inc/logger.h"
 #include "inc/world.h"
@@ -7,7 +8,9 @@
 
 int main(void)
 {
-  int world_status = WORLD_form(WINDOW_TITLE, 640, 480);
+  srand(time(NULL));
+
+  int world_status = WORLD_form(WINDOW_TITLE, 640, 480, 8, 4, 8);
   if (world_status != 0)
   {
     LOGG("WORLD_form failed");
