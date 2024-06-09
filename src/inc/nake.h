@@ -7,5 +7,6 @@
 int  NAKE_init(void);
 void NAKE_update(void);
 bool NAKE_eat_apple(SDL_FRect* apple_position);
+int  NAKE_get_score(void);
 void NAKE_render(void);
 void NAKE_deinit(void);

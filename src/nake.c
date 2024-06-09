@@ -16,7 +16,6 @@ typedef struct
   SDL_FRect        rect;
   SDL_FPoint p_position;
   SDL_Keycode direction;
-  int           p_score;
   int             score;
   int      max_tail_len;
   SDL_FRect*       tail;
@@ -36,7 +35,6 @@ int NAKE_init(void)
 
   nake.direction = SDLK_LEFT;
 
-  nake.p_score      = -1;
   nake.score        =  0;
   nake.max_tail_len = INIT_NAKE_TAIL_ALLOC;
   nake.tail         = malloc(sizeof(SDL_FRect) * nake.max_tail_len);
@@ -161,10 +159,14 @@ bool NAKE_eat_apple(SDL_FRect* apple_position)
   return false;
 }
 
+int NAKE_get_score(void)
+{
+  return nake.score;
+}
+
 void NAKE_render(void)
 {
   SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &nake.rect);
-  SDL_SetRenderDrawColor(world.renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectsF(world.renderer, nake.tail, nake.score);
 }
 

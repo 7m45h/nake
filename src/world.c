@@ -8,11 +8,13 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 
 #include "inc/apple.h"
 #include "inc/logger.h"
 #include "inc/nake.h"
+#include "inc/scoreboard.h"
 #include "inc/world.h"
 
 #define BLACK_TILE_IMG_PATH "./assets/black_tile_x8.png"
@@ -50,6 +52,13 @@ static void world_init(void)
     return;
   }
 
+  int score_status = SCOREB_init();
+  if (score_status != 0)
+  {
+    LOGG("SCOREB_init failed");
+    return;
+  }
+
   APPLE_init();
 
   world.evolving = true;
@@ -61,6 +70,7 @@ static void world_deinit(void)
   SDL_DestroyTexture(world.green_tile);
 
   NAKE_deinit();
+  SCOREB_deinit();
 
   LOGG("world deinit");
 }
@@ -101,6 +111,7 @@ static void world_render(void)
 
   APPLE_render();
   NAKE_render();
+  SCOREB_render();
 
   SDL_RenderPresent(world.renderer);
 }
@@ -124,6 +135,16 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
     return 1;
   }
 
+  int ttf_status = TTF_Init();
+  if (ttf_status != 0)
+  {
+    LOGG(TTF_GetError());
+    LOGG("TTF_Init failed");
+    IMG_Quit();
+    SDL_Quit();
+    return 1;
+  }
+
   world.window_dimensions.x = 0;
   world.window_dimensions.y = 0;
   world.window_dimensions.w = win_w;
@@ -133,6 +154,8 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
   if (world.window == NULL)
   {
     LOGG(SDL_GetError());
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
     return 1;
   }
@@ -142,6 +165,8 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
   {
     LOGG(SDL_GetError());
     SDL_DestroyWindow(world.window);
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
     return 1;
   }
@@ -193,6 +218,7 @@ void WORLD_evolve(void)
     if (NAKE_eat_apple(APPLE_get_position()))
     {
       APPLE_set_random_position();
+      SCOREB_update(NAKE_get_score());
     }
     world_render();
 
