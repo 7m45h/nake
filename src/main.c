@@ -1,16 +1,19 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "inc/configer.h"
 #include "inc/logger.h"
 #include "inc/world.h"
 
 #define WINDOW_TITLE "nake"
 
-int main(void)
+int main(int argc, char** argv)
 {
   srand(time(NULL));
 
-  int world_status = WORLD_form(WINDOW_TITLE, 640, 480, 8, 4, 8);
+  NConf confg = NCONF_get_config(argc, argv);
+
+  int world_status = WORLD_form(WINDOW_TITLE, confg.window_w, confg.window_h, confg.cell_size, confg.grid_margin_x, confg.grid_margin_y);
   if (world_status != 0)
   {
     LOGG("WORLD_form failed");
