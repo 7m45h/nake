@@ -1,26 +1,33 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
-#include <stdlib.h>
 
 #include "inc/apple.h"
 #include "inc/world.h"
 
-void APPLE_init(Apple* apple, Grid* grid)
+static SDL_FRect apple;
+
+void APPLE_init(void)
 {
-  apple->w = grid->cell_size;
-  apple->h = grid->cell_size;
-  APPLE_set_random_position(apple, grid);
+  apple.w = world.grid.cell_size;
+  apple.h = world.grid.cell_size;
+  APPLE_set_random_position();
 }
 
-void APPLE_set_random_position(Apple* apple, Grid* grid)
+void APPLE_set_random_position(void)
 {
-  apple->x = ((rand() % grid->col_count) * grid->cell_size) + grid->inner_rect.x;
-  apple->y = ((rand() % grid->row_count) * grid->cell_size) + grid->inner_rect.y;
+  apple.x = ((rand() % world.grid.col_count) * world.grid.cell_size) + world.grid.inner_rect.x;
+  apple.y = ((rand() % world.grid.row_count) * world.grid.cell_size) + world.grid.inner_rect.y;
 }
 
-void APPLE_render(Apple* apple, SDL_Renderer* renderer)
+SDL_FRect* APPLE_get_position(void)
 {
-  SDL_SetRenderDrawColor(renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
-  SDL_RenderFillRectF(renderer, apple);
+  return &apple;
+}
+
+void APPLE_render(void)
+{
+  SDL_SetRenderDrawColor(world.renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world.renderer, &apple);
 }
