@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <stdlib.h>
@@ -166,7 +167,8 @@ int NAKE_get_score(void)
 
 void NAKE_render(void)
 {
-  SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &nake.rect);
+  SDL_SetRenderDrawColor(world.renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world.renderer, &nake.rect);
   SDL_RenderFillRectsF(world.renderer, nake.tail, nake.score);
 }
 

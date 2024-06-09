@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
@@ -27,5 +28,6 @@ SDL_FRect* APPLE_get_position(void)
 
 void APPLE_render(void)
 {
-  SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &apple);
+  SDL_SetRenderDrawColor(world.renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world.renderer, &apple);
 }

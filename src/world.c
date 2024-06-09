@@ -1,7 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
@@ -17,9 +16,6 @@
 #include "inc/scoreboard.h"
 #include "inc/world.h"
 
-#define BLACK_TILE_IMG_PATH "./assets/black_tile_x8.png"
-#define GREEN_TILE_IMG_PATH "./assets/green_tile_x8.png"
-
 World world;
 
 #define FPS 10
@@ -31,20 +27,6 @@ static Uint64 crnt_frame_time  = 0;
 
 static void world_init(void)
 {
-  world.black_tile = IMG_LoadTexture(world.renderer, BLACK_TILE_IMG_PATH);
-  if (world.black_tile == NULL)
-  {
-    LOGG(IMG_GetError());
-    return;
-  }
-
-  world.green_tile = IMG_LoadTexture(world.renderer, GREEN_TILE_IMG_PATH);
-  if (world.green_tile == NULL)
-  {
-    LOGG(IMG_GetError());
-    return;
-  }
-
   int nake_status = NAKE_init();
   if (nake_status != 0)
   {
@@ -66,9 +48,6 @@ static void world_init(void)
 
 static void world_deinit(void)
 {
-  SDL_DestroyTexture(world.black_tile);
-  SDL_DestroyTexture(world.green_tile);
-
   NAKE_deinit();
   SCOREB_deinit();
 
@@ -103,11 +82,13 @@ static void world_handle_events(void)
 
 static void world_render(void)
 {
+  SDL_SetRenderDrawColor(world.renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(world.renderer);
 
-  SDL_RenderCopy(world.renderer, world.green_tile, NULL, &world.window_dimensions);
-  SDL_RenderCopyF(world.renderer, world.black_tile, NULL, &world.grid.outer_rect);
-  SDL_RenderCopyF(world.renderer, world.green_tile, NULL, &world.grid.inner_rect);
+  SDL_SetRenderDrawColor(world.renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world.renderer, &world.grid.outer_rect);
+  SDL_SetRenderDrawColor(world.renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world.renderer, &world.grid.inner_rect);
 
   APPLE_render();
   NAKE_render();
@@ -126,21 +107,11 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
     return 1;
   }
 
-  int img_status = IMG_Init(IMG_INIT_PNG);
-  if (img_status == 0)
-  {
-    LOGG(IMG_GetError());
-    SDL_Quit();
-    LOGG("IMG_Init failed");
-    return 1;
-  }
-
   int ttf_status = TTF_Init();
   if (ttf_status != 0)
   {
     LOGG(TTF_GetError());
     LOGG("TTF_Init failed");
-    IMG_Quit();
     SDL_Quit();
     return 1;
   }
@@ -154,7 +125,6 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
   if (world.window == NULL)
   {
     LOGG(SDL_GetError());
-    IMG_Quit();
     TTF_Quit();
     SDL_Quit();
     return 1;
@@ -165,7 +135,6 @@ int WORLD_form(const char* title, int win_w, int win_h, int cell_size, int grid_
   {
     LOGG(SDL_GetError());
     SDL_DestroyWindow(world.window);
-    IMG_Quit();
     TTF_Quit();
     SDL_Quit();
     return 1;
@@ -236,7 +205,7 @@ void WORLD_destroy(void)
 {
   SDL_DestroyRenderer(world.renderer);
   SDL_DestroyWindow(world.window);
-  IMG_Quit();
+  TTF_Quit();
   SDL_Quit();
   LOGG("quit");
 }

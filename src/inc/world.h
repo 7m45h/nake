@@ -30,9 +30,6 @@ typedef struct
   SDL_Keycode       crnt_key;
   bool              evolving;
   Grid                  grid;
-
-  SDL_Texture* black_tile;
-  SDL_Texture* green_tile;
 } World;
 
 extern World world;
