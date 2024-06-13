@@ -25,8 +25,10 @@ void GRID_populate(Grid* grid, int ww, int wh, int cell_size, int mx, int my)
 
   grid->inner_rect.x = grid->outer_rect.x + cell_size;
   grid->inner_rect.y = grid->outer_rect.y + cell_size;
-  grid->inner_rect.w = grid->outer_rect.w - (cell_size * 2);
-  grid->inner_rect.h = grid->outer_rect.h - (cell_size * 2);
+
+  cell_size *= 2;
+  grid->inner_rect.w = grid->outer_rect.w - cell_size;
+  grid->inner_rect.h = grid->outer_rect.h - cell_size;
 
   grid->col_count -= 2;
   grid->row_count -= 2;
