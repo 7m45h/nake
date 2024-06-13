@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -9,7 +11,11 @@
 #include "world_evolve.h"
 #include "world.h"
 
-World* WORLD_init(const char* title, int ww, int wh)
+static float expected_frame_time = 1000.0f;
+static Uint64 frame_start_time   = 0;
+static Uint64 crnt_frame_time    = 0;
+
+World* WORLD_init(const char* title, int ww, int wh, int fps)
 {
   World* world = malloc(sizeof(World));
   if (world == NULL)
@@ -51,6 +57,8 @@ World* WORLD_init(const char* title, int ww, int wh)
 
   world->evolving = false;
 
+  expected_frame_time /= fps;
+
   return world;
 }
 
@@ -60,8 +68,16 @@ void WORLD_evolve(World* world)
 
   while (world->evolving)
   {
+    frame_start_time = SDL_GetTicks64();
+
     world_handle_events(world);
     world_render(world);
+
+    crnt_frame_time = SDL_GetTicks64() - frame_start_time;
+    if (crnt_frame_time < expected_frame_time)
+    {
+      SDL_Delay(expected_frame_time - crnt_frame_time);
+    }
   }
 }
 

@@ -18,6 +18,6 @@ typedef struct
   bool              evolving;
 } World;
 
-World* WORLD_init(const char* title, int ww, int wh);
+World* WORLD_init(const char* title, int ww, int wh, int fps);
 void   WORLD_evolve(World* world);
 void   WORLD_destroy(World* world);
