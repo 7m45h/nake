@@ -6,8 +6,10 @@
 #include <SDL2/SDL_video.h>
 #include <stdbool.h>
 
+#include "grid.h"
+
 #define COLOR_BG 0x00, 0xb1, 0x40
-#define COLOR_FG 0x00, 0xb1, 0x40
+#define COLOR_FG 0x00, 0x00, 0x00
 
 typedef struct
 {
@@ -18,8 +20,10 @@ typedef struct
   bool              evolving;
   float          update_time;
   float    event_hanlde_time;
+
+  Grid grid;
 } World;
 
-World* WORLD_init(const char* title, int ww, int wh, int fps, int efps);
+World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, int mx, int my);
 void   WORLD_evolve(World* world);
 void   WORLD_destroy(World* world);

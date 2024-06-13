@@ -13,7 +13,7 @@
 
 #define ONE_MILISEC 1000.0f
 
-World* WORLD_init(const char* title, int ww, int wh, int fps, int efps)
+World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, int mx, int my)
 {
   World* world = malloc(sizeof(World));
   if (world == NULL)
@@ -56,6 +56,8 @@ World* WORLD_init(const char* title, int ww, int wh, int fps, int efps)
   world->evolving          = false;
   world->update_time       = ONE_MILISEC / fps;
   world->event_hanlde_time = ONE_MILISEC / efps;
+
+  GRID_populate(&world->grid, ww, wh, cs, mx, my);
 
   return world;
 }
