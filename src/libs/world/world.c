@@ -1,9 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
-#include <SDL2/SDL_stdinc.h>
-#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <bits/pthreadtypes.h>
+#include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -11,11 +11,9 @@
 #include "world_evolve.h"
 #include "world.h"
 
-static float expected_frame_time = 1000.0f;
-static Uint64 frame_start_time   = 0;
-static Uint64 crnt_frame_time    = 0;
+#define ONE_MILISEC 1000.0f
 
-World* WORLD_init(const char* title, int ww, int wh, int fps)
+World* WORLD_init(const char* title, int ww, int wh, int fps, int efps)
 {
   World* world = malloc(sizeof(World));
   if (world == NULL)
@@ -55,9 +53,9 @@ World* WORLD_init(const char* title, int ww, int wh, int fps)
     return NULL;
   }
 
-  world->evolving = false;
-
-  expected_frame_time /= fps;
+  world->evolving          = false;
+  world->update_time       = ONE_MILISEC / fps;
+  world->event_hanlde_time = ONE_MILISEC / efps;
 
   return world;
 }
@@ -66,19 +64,19 @@ void WORLD_evolve(World* world)
 {
   world->evolving = true;
 
+  pthread_t event_thread;
+  pthread_t update_thread;
+
+  pthread_create(&event_thread, NULL, world_handle_events, world);
+  pthread_create(&update_thread, NULL, world_update, world);
+
   while (world->evolving)
   {
-    frame_start_time = SDL_GetTicks64();
-
-    world_handle_events(world);
     world_render(world);
-
-    crnt_frame_time = SDL_GetTicks64() - frame_start_time;
-    if (crnt_frame_time < expected_frame_time)
-    {
-      SDL_Delay(expected_frame_time - crnt_frame_time);
-    }
   }
+
+  pthread_join(event_thread, NULL);
+  pthread_join(update_thread, NULL);
 }
 
 void WORLD_destroy(World* world)

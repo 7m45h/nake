@@ -16,8 +16,10 @@ typedef struct
   SDL_Renderer*     renderer;
   SDL_Event            event;
   bool              evolving;
+  float          update_time;
+  float    event_hanlde_time;
 } World;
 
-World* WORLD_init(const char* title, int ww, int wh, int fps);
+World* WORLD_init(const char* title, int ww, int wh, int fps, int efps);
 void   WORLD_evolve(World* world);
 void   WORLD_destroy(World* world);
