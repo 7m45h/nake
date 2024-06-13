@@ -1,6 +1,6 @@
-CXX := g++
+CC := gcc
 CPPFLAGS := -MMD
-CXXFLAGS := -march=native
+CFLAGS := -march=native
 LDFLAGS :=
 
 SRC_DIR := src
@@ -11,17 +11,17 @@ BUILD_DIR := build
 DEBUG_DIR := ${BUILD_DIR}/debug
 FINAL_DIR := ${BUILD_DIR}/final
 
-SRCS := $(patsubst ./${SRC_DIR}/%,%,$(shell find -type f -name "*.cpp"))
-OBJS := $(patsubst %.cpp,%.o,${SRCS})
+SRCS := $(patsubst ./${SRC_DIR}/%,%,$(shell find -type f -name "*.c"))
+OBJS := $(patsubst %.c,%.o,${SRCS})
 BIN := $(shell basename ${CURDIR})
 
 ifeq (${MODE}, final)
-CXXFLAGS += -Ofast -s
+CFLAGS += -Ofast -s
 OBJ_DIR := $(addprefix ${FINAL_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${FINAL_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${FINAL_DIR}/,${BIN})
 else
-CXXFLAGS += -Wall -Wextra -g
+CFLAGS += -Wall -Wextra -g
 OBJ_DIR := $(addprefix ${DEBUG_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${DEBUG_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${DEBUG_DIR}/,${BIN})
@@ -29,13 +29,13 @@ endif
 
 ${BIN}: $(addprefix ${OBJ_DIR}/,${OBJS}) | ${BUILD_DIR} ${DEBUG_DIR} ${FINAL_DIR} ${LIBS_DIRS}
 ifndef LDFLAGS
-	${CXX} ${CXXFLAGS} -o $@ $^
+	${CC} ${CFLAGS} -o $@ $^
 else
-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ $^
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 endif
 
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.cpp | ${OBJ_DIR} ${LIBS_DIRS}
-	${CXX} ${CPPFLAGS} ${CXXFLAGS} -o $@ -c $<
+${OBJ_DIR}/%.o: ${SRC_DIR}/%.c | ${OBJ_DIR} ${LIBS_DIRS}
+	${CC} ${CPPFLAGS} ${CFLAGS} -o $@ -c $<
 
 ${BUILD_DIR} ${DEBUG_DIR} ${FINAL_DIR}:
 	mkdir $@
