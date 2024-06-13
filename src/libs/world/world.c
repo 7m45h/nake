@@ -64,15 +64,15 @@ void WORLD_evolve(World* world)
 {
   world->evolving = true;
 
-  pthread_t event_thread;
+  pthread_t  event_thread;
   pthread_t update_thread;
 
-  pthread_create(&event_thread, NULL, world_handle_events, world);
-  pthread_create(&update_thread, NULL, world_update, world);
+  pthread_create(&event_thread,  NULL, world_handle_events, world);
+  pthread_create(&update_thread, NULL, world_update,        world);
 
   while (world->evolving) world_render(world);
 
-  pthread_join(event_thread, NULL);
+  pthread_join(event_thread,  NULL);
   pthread_join(update_thread, NULL);
 }
 
