@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <bits/pthreadtypes.h>
 #include <pthread.h>
@@ -27,8 +28,18 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   {
     LOGG(SDL_GetError());
     LOGG("SDL_Init failed");
+    TTF_Quit();
     SDL_Quit();
     return NULL;
+  }
+
+  int ttf_status = TTF_Init();
+  if (ttf_status != 0)
+  {
+    LOGG(TTF_GetError());
+    LOGG("TTF_Init failed");
+    TTF_Quit();
+    SDL_Quit();
   }
 
   world->window_dimensions.x = 0;
@@ -41,6 +52,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   {
     LOGG(SDL_GetError());
     LOGG("SDL_CreateWindow failed");
+    TTF_Quit();
     SDL_Quit();
     return NULL;
   }
@@ -50,6 +62,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   {
     LOGG(SDL_GetError());
     LOGG("SDL_CreateRenderer failed");
+    TTF_Quit();
     SDL_Quit();
     return NULL;
   }
@@ -87,6 +100,7 @@ void WORLD_destroy(World* world)
   SDL_DestroyRenderer(world->renderer);
   SDL_DestroyWindow(world->window);
   free(world);
+  TTF_Quit();
   SDL_Quit();
   LOGG("world destroyed!");
 }

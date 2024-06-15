@@ -19,12 +19,20 @@ bool world_init(World* world)
     return false;
   }
 
+  int sboard_status = SBOARD_init(&world->sboard, &world->grid);
+  if (sboard_status != 0)
+  {
+    LOGG("SBOARD_init failed");
+    return false;
+  }
+
   return true;
 }
 
 void world_deinit(World* world)
 {
   NAKE_deinit(&world->nake);
+  SBOARD_deinit(&world->sboard);
 }
 
 void* world_handle_events(void* vp_world)
@@ -85,6 +93,7 @@ void* world_update(World* vp_world)
     if (NAKE_eat_apple(&world->nake, &world->apple))
     {
       APPLE_set_random_position(&world->apple, &world->grid);
+      world->sboard.outdated = true;
     }
 
     crnt_frame_time = SDL_GetTicks64() - frame_start_time;
@@ -114,6 +123,10 @@ void world_render(World* world)
   // nake
   SDL_RenderFillRectF(world->renderer, &world->nake.rect);
   SDL_RenderFillRectsF(world->renderer, world->nake.tail, world->nake.score);
+
+  // score board
+  if (world->sboard.outdated) SBOARD_update(&world->sboard, world->nake.score, world->renderer, &world->window_dimensions, &world->grid);
+  SDL_RenderCopyF(world->renderer, world->sboard.texture, NULL, &world->sboard.rect);
 
   SDL_RenderPresent(world->renderer);
 }
