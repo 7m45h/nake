@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 
-#include "../world/grid.h"
+#include "../world/grid/grid.h"
 
 typedef SDL_FRect Apple;
 

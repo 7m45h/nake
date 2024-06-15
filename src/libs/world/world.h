@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #include "../apple/apple.h"
-#include "grid.h"
+#include "grid/grid.h"
 
 #define COLOR_BG 0x00, 0xb1, 0x40
 #define COLOR_FG 0x00, 0x00, 0x00

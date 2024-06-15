@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include "libs/logger.h"
 #include "libs/world/world.h"
@@ -15,6 +16,8 @@
 
 int main(void)
 {
+  srand(time(NULL));
+
   World* world = WORLD_form(DEFAULT_WINDOW_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_FPS, DEFAULT_WINDOW_EFPS, DEFAULT_GRID_CELLSIZE, DEFAULT_GRID_MX, DEFAULT_GRID_MY);
   if (world == NULL)
   {
