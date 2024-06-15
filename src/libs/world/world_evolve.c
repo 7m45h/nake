@@ -77,10 +77,15 @@ void world_render(World* world)
   SDL_SetRenderDrawColor(world->renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(world->renderer);
 
+  // grid
   SDL_SetRenderDrawColor(world->renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(world->renderer, &world->grid.outer_rect);
   SDL_SetRenderDrawColor(world->renderer, COLOR_BG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(world->renderer, &world->grid.inner_rect);
+
+  // apple
+  SDL_SetRenderDrawColor(world->renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(world->renderer, &world->apple);
 
   SDL_RenderPresent(world->renderer);
 }

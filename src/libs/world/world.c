@@ -59,6 +59,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   world->event_hanlde_time = ONE_MILISEC / efps;
 
   GRID_populate(&world->grid, ww, wh, cs, mx, my);
+  APPLE_init(&world->apple, &world->grid);
 
   return world;
 }
