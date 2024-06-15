@@ -7,7 +7,25 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "../logger.h"
 #include "world.h"
+
+bool world_init(World* world)
+{
+  int nake_status = NAKE_init(&world->nake, &world->grid);
+  if (nake_status != 0)
+  {
+    LOGG("NAKE_init failed");
+    return false;
+  }
+
+  return true;
+}
+
+void world_deinit(World* world)
+{
+  NAKE_deinit(&world->nake);
+}
 
 void* world_handle_events(void* vp_world)
 {
@@ -34,6 +52,9 @@ void* world_handle_events(void* vp_world)
           case SDLK_q:
           world->evolving = false;
           break;
+
+          default:
+          world->crnt_key = world->event.key.keysym.sym;
         }
         break;
       }
@@ -60,7 +81,11 @@ void* world_update(World* vp_world)
   {
     frame_start_time = SDL_GetTicks64();
 
-    printf("running: %d\n", world->evolving);
+    NAKE_update(&world->nake, world->crnt_key, &world->grid);
+    if (NAKE_eat_apple(&world->nake, &world->apple))
+    {
+      APPLE_set_random_position(&world->apple, &world->grid);
+    }
 
     crnt_frame_time = SDL_GetTicks64() - frame_start_time;
     if (crnt_frame_time < world->update_time)
@@ -86,6 +111,9 @@ void world_render(World* world)
   // apple
   SDL_SetRenderDrawColor(world->renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(world->renderer, &world->apple);
+  // nake
+  SDL_RenderFillRectF(world->renderer, &world->nake.rect);
+  SDL_RenderFillRectsF(world->renderer, world->nake.tail, world->nake.score);
 
   SDL_RenderPresent(world->renderer);
 }

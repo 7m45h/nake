@@ -33,5 +33,8 @@ void GRID_populate(Grid* grid, int ww, int wh, int cell_size, int mx, int my)
   grid->col_count -= 2;
   grid->row_count -= 2;
 
+  grid->inner_rect_xtyt.x = grid->inner_rect.x + grid->inner_rect.w;
+  grid->inner_rect_xtyt.y = grid->inner_rect.y + grid->inner_rect.h;
+
   LOGG("grid populated!");
 }

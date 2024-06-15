@@ -66,7 +66,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
 
 void WORLD_evolve(World* world)
 {
-  world->evolving = true;
+  world->evolving = world_init(world);
 
   pthread_t  event_thread;
   pthread_t update_thread;
@@ -78,6 +78,8 @@ void WORLD_evolve(World* world)
 
   pthread_join(event_thread,  NULL);
   pthread_join(update_thread, NULL);
+
+  world_deinit(world);
 }
 
 void WORLD_destroy(World* world)
