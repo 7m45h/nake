@@ -1,27 +1,32 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "inc/configer.h"
-#include "inc/logger.h"
-#include "inc/world.h"
+#include "libs/logger.h"
+#include "libs/world/world.h"
 
-#define WINDOW_TITLE "nake"
+#define DEFAULT_WINDOW_TITLE  "nake"
+#define DEFAULT_WINDOW_WIDTH  640
+#define DEFAULT_WINDOW_HEIGHT 480
+#define DEFAULT_WINDOW_FPS    10
+#define DEFAULT_WINDOW_EFPS   24
 
-int main(int argc, char** argv)
+#define DEFAULT_GRID_CELLSIZE 8
+#define DEFAULT_GRID_MX       4
+#define DEFAULT_GRID_MY       8
+
+int main(void)
 {
   srand(time(NULL));
 
-  NConf confg = NCONF_get_config(argc, argv);
-
-  int world_status = WORLD_form(WINDOW_TITLE, confg.window_w, confg.window_h, confg.cell_size, confg.grid_margin_x, confg.grid_margin_y);
-  if (world_status != 0)
+  World* world = WORLD_form(DEFAULT_WINDOW_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_FPS, DEFAULT_WINDOW_EFPS, DEFAULT_GRID_CELLSIZE, DEFAULT_GRID_MX, DEFAULT_GRID_MY);
+  if (world == NULL)
   {
-    LOGG("WORLD_form failed");
+    LOGG("WORLD_init faild");
     return EXIT_FAILURE;
   }
 
-  WORLD_evolve();
-  WORLD_destroy();
+  WORLD_evolve(world);
+  WORLD_destroy(world);
 
   return EXIT_SUCCESS;
 }
