@@ -22,12 +22,12 @@ static char doc[]      = "simple snake game made with SDL2";
 static char args_doc[] = "all the arguments are optional";
 
 static struct argp_option options[] = {
-  { "width",    'w', "width",     OPTION_ARG_OPTIONAL,                                         "window width" },
-  { "height",   'h', "height",    OPTION_ARG_OPTIONAL,                                        "window height" },
-  { "speed",    's', "speed",     OPTION_ARG_OPTIONAL, "fps snake update effectivly changing the snake speed" },
-  { "cell",     'c', "cell_size", OPTION_ARG_OPTIONAL,                                       "grid cell size" },
-  { "margin_l", 'l', "ml",        OPTION_ARG_OPTIONAL,                                    "grid margin right" },
-  { "margin_b", 'b', "mb",        OPTION_ARG_OPTIONAL,                                   "grid margin bottom" },
+  { "width",    'w', "width",     OPTION_ARG_OPTIONAL,                                         "window width", 1 },
+  { "height",   'h', "height",    OPTION_ARG_OPTIONAL,                                        "window height", 1 },
+  { "speed",    's', "speed",     OPTION_ARG_OPTIONAL, "fps snake update effectivly changing the snake speed", 2 },
+  { "cell",     'c', "cell_size", OPTION_ARG_OPTIONAL,                                       "grid cell size", 3 },
+  { "margin_l", 'l', "ml",        OPTION_ARG_OPTIONAL,                                    "grid margin right", 4 },
+  { "margin_b", 'b', "mb",        OPTION_ARG_OPTIONAL,                                   "grid margin bottom", 4 },
   { 0 }
 };
 
@@ -68,7 +68,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
   return 0;
 }
 
-static struct argp argp = { options, parse_opt, args_doc, doc };
+static struct argp argp = { options, parse_opt, args_doc, doc, NULL, NULL, NULL};
 
 int main(int argc, char** argv)
 {
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     DEFAULT_GRID_MY
   };
 
-  argp_parse(&argp, argc, argv, 0, 0, &conf);
+  argp_parse(&argp, argc, argv, 0, NULL, &conf);
 
   World* world = WORLD_form(DEFAULT_WINDOW_TITLE, conf.width, conf.height, conf.speed, DEFAULT_WINDOW_EFPS, conf.cell_size, conf.ml, conf.mb);
   if (world == NULL)
