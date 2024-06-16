@@ -8,9 +8,9 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "../logger.h"
-#include "world_evolve.h"
+#include "../../logger.h"
 #include "world.h"
+#include "world_evolve.h"
 
 #define ONE_MILISEC 1000.0f
 

@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "libs/logger.h"
 #include "libs/world/world.h"
+#include "logger.h"
 #include "nconf.h"
 
 #define DEFAULT_WINDOW_TITLE  "nake"

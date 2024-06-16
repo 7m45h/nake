@@ -6,8 +6,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "../../logger.h"
 #include "../world/world.h"
-#include "../logger.h"
 #include "scoreboard.h"
 
 #define TERMINUS_FONT_PATH "./assets/terminus.ttf"

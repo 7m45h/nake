@@ -3,7 +3,7 @@
 #include <SDL2/SDL_rect.h>
 #include <stdlib.h>
 
-#include "../logger.h"
+#include "../../logger.h"
 #include "nake.h"
 
 #define INIT_NAKE_TAIL_LENGTH   128

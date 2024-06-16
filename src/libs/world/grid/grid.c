@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 
-#include "../../logger.h"
+#include "../../../logger.h"
 #include "grid.h"
 
 void GRID_populate(Grid* grid, int ww, int wh, int cell_size, int mx, int my)
