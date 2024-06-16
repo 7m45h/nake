@@ -1,6 +1,6 @@
 CC := gcc
 CPPFLAGS := -MMD
-CFLAGS := -march=native
+CFLAGS := -Wall -Wextra -march=native
 LDFLAGS := -lSDL2 -lSDL2_ttf
 
 SRC_DIR := src
@@ -21,7 +21,7 @@ OBJ_DIR := $(addprefix ${FINAL_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${FINAL_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${FINAL_DIR}/,${BIN})
 else
-CFLAGS += -Wall -Wextra -g
+CFLAGS += -g
 OBJ_DIR := $(addprefix ${DEBUG_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${DEBUG_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${DEBUG_DIR}/,${BIN})
