@@ -16,7 +16,7 @@
 #define DEFAULT_GRID_MX       4
 #define DEFAULT_GRID_MY       8
 
-const char* argp_program_version = "0.0.0";
+const char* argp_program_version = "1.0.0";
 
 static char doc[]      = "simple snake game made with SDL2";
 static char args_doc[] = "all the arguments are optional";
