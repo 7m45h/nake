@@ -23,6 +23,7 @@ typedef struct
   SDL_Event            event;
   SDL_Keycode       crnt_key;
   bool              evolving;
+  bool              windowed;
   float          update_time;
   float    event_hanlde_time;
 

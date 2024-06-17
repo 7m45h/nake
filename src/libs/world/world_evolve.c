@@ -78,6 +78,11 @@ void* world_handle_events(void* vp_world)
           world->evolving = false;
           break;
 
+          case SDLK_f:
+          world->windowed = !world->windowed;
+          SDL_SetWindowFullscreen(world->window, world->windowed ? SDL_WINDOW_FULLSCREEN : 0);
+          break;
+
           default:
           world->crnt_key = world->event.key.keysym.sym;
         }
