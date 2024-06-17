@@ -9,3 +9,4 @@ typedef SDL_FRect Apple;
 
 void APPLE_init(Apple* apple, Grid* grid);
 void APPLE_set_random_position(Apple* apple, Grid* grid);
+void APPLE_handle_grid_resize(Apple* apple, Grid* grid);

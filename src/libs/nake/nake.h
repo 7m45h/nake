@@ -21,6 +21,7 @@ typedef struct
 } Nake;
 
 int  NAKE_init(Nake* nake, Grid* grid);
+void NAKE_handle_grid_resize(Nake* nake, Grid* grid);
 void NAKE_update(Nake* nake, SDL_Keycode key, Grid* grid);
 bool NAKE_eat_apple(Nake* nake, Apple* apple);
 void NAKE_deinit(Nake* nake);

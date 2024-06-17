@@ -59,8 +59,8 @@ void SBOARD_update(SBoard* sboard, int score, SDL_Renderer* renderer, SDL_Rect* 
     return;
   }
 
-  sboard->rect.x = window_dim->w - score_surface->w - grid->margin_x * grid->cell_size;
-  sboard->rect.y = window_dim->h - score_surface->h - (grid->margin_y / SCORE_FONT_RATIO) * grid->cell_size;
+  sboard->rect.x = window_dim->w - score_surface->w - grid->margin.x;
+  sboard->rect.y = window_dim->h - grid->margin.y + (score_surface->h * 0.5);
   sboard->rect.w = score_surface->w;
   sboard->rect.h = score_surface->h;
 

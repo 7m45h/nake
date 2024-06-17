@@ -4,10 +4,12 @@
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_video.h>
 #include <stdbool.h>
 #include <stdio.h>
 
 #include "../../logger.h"
+#include "grid/grid.h"
 #include "world.h"
 
 bool world_init(World* world)
@@ -52,6 +54,21 @@ void* world_handle_events(void* vp_world)
       {
         case SDL_QUIT:
         world->evolving = false;
+        break;
+
+        case SDL_WINDOWEVENT:
+        switch (world->event.window.event)
+        {
+          case SDL_WINDOWEVENT_RESIZED:
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+          world->window_dimensions.w = world->event.window.data1;
+          world->window_dimensions.h = world->event.window.data2;
+          GRID_handle_window_resize(&world->grid, &world->window_dimensions);
+          APPLE_handle_grid_resize(&world->apple, &world->grid);
+          NAKE_handle_grid_resize(&world->nake, &world->grid);
+          world->sboard.outdated = true;
+          break;
+        }
         break;
 
         case SDL_KEYDOWN:

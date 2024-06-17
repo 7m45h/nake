@@ -17,8 +17,8 @@ static SDL_FPoint tail_c_position = {0, 0};
 
 int NAKE_init(Nake* nake, Grid* grid)
 {
-  nake->rect.x = (rand() % grid->col_count) * grid->cell_size + grid->inner_rect.x;
-  nake->rect.y = (rand() % grid->row_count) * grid->cell_size + grid->inner_rect.y;
+  nake->rect.x = (rand() % grid->cell_count.y) * grid->cell_size + grid->inner_rect.x;
+  nake->rect.y = (rand() % grid->cell_count.x) * grid->cell_size + grid->inner_rect.y;
   nake->rect.w = grid->cell_size;
   nake->rect.h = grid->cell_size;
 
@@ -37,6 +37,15 @@ int NAKE_init(Nake* nake, Grid* grid)
   nake_wraparound_down  = grid->inner_rect.y + grid->inner_rect.h - grid->cell_size;
 
   return 0;
+}
+
+void NAKE_handle_grid_resize(Nake* nake, Grid* grid)
+{
+  nake->rect.x += grid->offset.x;
+  nake->rect.y += grid->offset.y;
+
+  nake_wraparound_right = grid->inner_rect.x + grid->inner_rect.w - grid->cell_size;
+  nake_wraparound_down  = grid->inner_rect.y + grid->inner_rect.h - grid->cell_size;
 }
 
 void NAKE_update(Nake* nake, SDL_Keycode key, Grid* grid)

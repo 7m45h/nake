@@ -68,7 +68,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
   return 0;
 }
 
-static struct argp argp = { options, parse_opt, args_doc, doc, NULL, NULL, NULL};
+static struct argp argp = { options, parse_opt, args_doc, doc, NULL, NULL, NULL };
 
 int main(int argc, char** argv)
 {

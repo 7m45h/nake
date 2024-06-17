@@ -47,7 +47,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   world->window_dimensions.w = ww;
   world->window_dimensions.h = wh;
 
-  world->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ww, wh, 0);
+  world->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ww, wh, SDL_WINDOW_RESIZABLE);
   if (world->window == NULL)
   {
     LOGG(SDL_GetError());
