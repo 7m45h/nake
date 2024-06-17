@@ -62,6 +62,7 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
   {
     LOGG(SDL_GetError());
     LOGG("SDL_CreateRenderer failed");
+    SDL_DestroyWindow(world->window);
     TTF_Quit();
     SDL_Quit();
     return NULL;
