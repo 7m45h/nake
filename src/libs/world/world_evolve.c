@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
@@ -81,6 +82,7 @@ void* world_handle_events(void* vp_world)
           case SDLK_f:
           world->windowed = !world->windowed;
           SDL_SetWindowFullscreen(world->window, world->windowed ? SDL_WINDOW_FULLSCREEN : 0);
+          SDL_ShowCursor(world->windowed ? SDL_DISABLE : SDL_ENABLE);
           break;
 
           default:

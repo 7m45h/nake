@@ -14,7 +14,7 @@
 
 #define ONE_MILISEC 1000.0f
 
-World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, int mx, int my)
+World* WORLD_form(const char* title, int cs, int gccc, int grcc, int fps)
 {
   World* world = malloc(sizeof(World));
   if (world == NULL)
@@ -40,14 +40,26 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
     LOGG("TTF_Init failed");
     TTF_Quit();
     SDL_Quit();
+    return NULL;
+  }
+
+  SDL_DisplayMode display_info;
+  int sdl_display_mode_status = SDL_GetDesktopDisplayMode(0, &display_info);
+  if (sdl_display_mode_status != 0)
+  {
+    LOGG(SDL_GetError());
+    LOGG("SDL_GetDesktopDisplayMode failed");
+    TTF_Quit();
+    SDL_Quit();
+    return NULL;
   }
 
   world->window_dimensions.x = 0;
   world->window_dimensions.y = 0;
-  world->window_dimensions.w = ww;
-  world->window_dimensions.h = wh;
+  world->window_dimensions.w = display_info.w * 0.75f;
+  world->window_dimensions.h = display_info.h * 0.75f;
 
-  world->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, ww, wh, SDL_WINDOW_RESIZABLE);
+  world->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, world->window_dimensions.w, world->window_dimensions.h, SDL_WINDOW_RESIZABLE);
   if (world->window == NULL)
   {
     LOGG(SDL_GetError());
@@ -70,9 +82,9 @@ World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, 
 
   world->evolving          = false;
   world->update_time       = ONE_MILISEC / fps;
-  world->event_hanlde_time = ONE_MILISEC / efps;
+  world->event_hanlde_time = ONE_MILISEC / display_info.refresh_rate;
 
-  GRID_populate(&world->grid, ww, wh, cs, mx, my);
+  GRID_populate(&world->grid, &world->window_dimensions, cs, gccc, grcc);
   APPLE_init(&world->apple, &world->grid);
 
   return world;

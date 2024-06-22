@@ -33,6 +33,6 @@ typedef struct
   SBoard sboard;
 } World;
 
-World* WORLD_form(const char* title, int ww, int wh, int fps, int efps, int cs, int mx, int my);
+World* WORLD_form(const char* title, int cs, int gccc, int grcc, int fps);
 void   WORLD_evolve(World* world);
 void   WORLD_destroy(World* world);

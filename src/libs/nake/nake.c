@@ -12,13 +12,13 @@
 static float nake_wraparound_right = 0;
 static float nake_wraparound_down  = 0;
 
-static SDL_FPoint tail_p_position = {0, 0};
-static SDL_FPoint tail_c_position = {0, 0};
+static SDL_FPoint tail_p_position = { 0, 0 };
+static SDL_FPoint tail_c_position = { 0, 0 };
 
 int NAKE_init(Nake* nake, Grid* grid)
 {
-  nake->rect.x = (rand() % grid->cell_count.y) * grid->cell_size + grid->inner_rect.x;
-  nake->rect.y = (rand() % grid->cell_count.x) * grid->cell_size + grid->inner_rect.y;
+  nake->rect.x = (rand() % grid->cell_count.x) * grid->cell_size + grid->inner_rect.x;
+  nake->rect.y = (rand() % grid->cell_count.y) * grid->cell_size + grid->inner_rect.y;
   nake->rect.w = grid->cell_size;
   nake->rect.h = grid->cell_size;
 

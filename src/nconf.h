@@ -2,10 +2,8 @@
 
 typedef struct
 {
-  int     width;
-  int    height;
-  int     speed;
-  int cell_size;
-  int        ml;
-  int        mb;
+  int      cell_size;
+  int g_c_cell_count;
+  int g_r_cell_count;
+  int            fps;
 } NConf;

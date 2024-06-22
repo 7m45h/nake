@@ -7,14 +7,11 @@
 #include "nconf.h"
 
 #define DEFAULT_WINDOW_TITLE  "nake"
-#define DEFAULT_WINDOW_WIDTH  640
-#define DEFAULT_WINDOW_HEIGHT 480
 #define DEFAULT_WINDOW_FPS    10
-#define DEFAULT_WINDOW_EFPS   24
 
 #define DEFAULT_GRID_CELLSIZE 8
-#define DEFAULT_GRID_MX       4
-#define DEFAULT_GRID_MY       8
+#define DEFAULT_GRID_CCC      64
+#define DEFAULT_GRID_RCC      32
 
 const char* argp_program_version = "1.0.0";
 
@@ -22,12 +19,10 @@ static char doc[]      = "simple snake game made with SDL2";
 static char args_doc[] = "all the arguments are optional";
 
 static struct argp_option options[] = {
-  { "width",    'w', "width",     OPTION_ARG_OPTIONAL,                                         "window width", 1 },
-  { "height",   'h', "height",    OPTION_ARG_OPTIONAL,                                        "window height", 1 },
-  { "speed",    's', "speed",     OPTION_ARG_OPTIONAL, "fps snake update effectivly changing the snake speed", 2 },
-  { "cell",     'c', "cell_size", OPTION_ARG_OPTIONAL,                                       "grid cell size", 3 },
-  { "margin_l", 'l', "ml",        OPTION_ARG_OPTIONAL,                                    "grid margin right", 4 },
-  { "margin_b", 'b', "mb",        OPTION_ARG_OPTIONAL,                                   "grid margin bottom", 4 },
+  { "cell_size", 's', "cs",  OPTION_ARG_OPTIONAL, "grid cell size",      1 },
+  { "col",       'c', "col", OPTION_ARG_OPTIONAL, "grid col cell count", 1 },
+  { "row",       'r', "row", OPTION_ARG_OPTIONAL, "grid row cell count", 1 },
+  { "fps",       'f', "fps", OPTION_ARG_OPTIONAL, "fps game is updated", 2 },
   { 0 }
 };
 
@@ -37,28 +32,20 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 
   switch (key)
   {
-    case 'w':
-    conf->width     = arg ? atoi(arg) : DEFAULT_WINDOW_WIDTH;
-    break;
-
-    case 'h':
-    conf->height    = arg ? atoi(arg) : DEFAULT_WINDOW_HEIGHT;
-    break;
-
     case 's':
-    conf->speed     = arg ? atoi(arg) : DEFAULT_WINDOW_FPS;
+    conf->cell_size      = arg ? atoi(arg) : DEFAULT_GRID_CELLSIZE;
     break;
 
     case 'c':
-    conf->cell_size = arg ? atoi(arg) : DEFAULT_GRID_CELLSIZE;
+    conf->g_c_cell_count = arg ? atoi(arg) : DEFAULT_GRID_CCC;
     break;
 
-    case 'l':
-    conf->ml        = arg ? atoi(arg) : DEFAULT_GRID_MX;
+    case 'r':
+    conf->g_r_cell_count = arg ? atoi(arg) : DEFAULT_GRID_RCC;
     break;
 
-    case 'b':
-    conf->mb        = arg ? atoi(arg) : DEFAULT_GRID_MY;
+    case 'f':
+    conf->fps            = arg ? atoi(arg) : DEFAULT_WINDOW_FPS;
     break;
 
     default:
@@ -75,17 +62,15 @@ int main(int argc, char** argv)
   srand(time(NULL));
 
   NConf conf = {
-    DEFAULT_WINDOW_WIDTH,
-    DEFAULT_WINDOW_HEIGHT,
-    DEFAULT_WINDOW_FPS,
     DEFAULT_GRID_CELLSIZE,
-    DEFAULT_GRID_MX,
-    DEFAULT_GRID_MY
+    DEFAULT_GRID_CCC,
+    DEFAULT_GRID_RCC,
+    DEFAULT_WINDOW_FPS
   };
 
   argp_parse(&argp, argc, argv, 0, NULL, &conf);
 
-  World* world = WORLD_form(DEFAULT_WINDOW_TITLE, conf.width, conf.height, conf.speed, DEFAULT_WINDOW_EFPS, conf.cell_size, conf.ml, conf.mb);
+  World* world = WORLD_form(DEFAULT_WINDOW_TITLE, conf.cell_size, conf.g_c_cell_count, conf.g_r_cell_count, conf.fps);
   if (world == NULL)
   {
     LOGG("WORLD_init faild");
