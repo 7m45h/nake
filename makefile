@@ -1,7 +1,8 @@
 CC := gcc
 CPPFLAGS := -MMD
-CFLAGS := -Wall -Wextra -march=native
-LDFLAGS := -lSDL2 -lSDL2_ttf
+LINK_LIBS := sdl2 SDL2_ttf
+CFLAGS := -Wall -Wextra -march=native $(shell pkg-config --cflags ${LINK_LIBS})
+LDFLAGS := $(shell pkg-config --libs ${LINK_LIBS})
 
 SRC_DIR := src
 OBJ_DIR := obj
