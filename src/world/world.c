@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "../../logger.h"
+#include "../logger.h"
 #include "world.h"
 #include "world_evolve.h"
 

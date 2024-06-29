@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../../logger.h"
+#include "../logger.h"
 #include "../world/world.h"
 #include "scoreboard.h"
 

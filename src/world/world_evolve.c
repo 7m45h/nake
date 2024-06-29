@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "../../logger.h"
+#include "../logger.h"
 #include "grid/grid.h"
 #include "world.h"
 

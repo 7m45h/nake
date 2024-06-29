@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_rect.h>
 
-#include "../../../logger.h"
+#include "../../logger.h"
 #include "grid.h"
 
 void GRID_populate(Grid* grid, SDL_Rect* window_dim, int cs, int ccc, int rcc)

@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "libs/world/world.h"
 #include "logger.h"
 #include "nconf.h"
+#include "world/world.h"
 
 #define DEFAULT_WINDOW_TITLE  "nake"
 #define DEFAULT_WINDOW_FPS    10
