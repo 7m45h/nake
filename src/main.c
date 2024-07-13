@@ -16,13 +16,12 @@
 const char* argp_program_version = "1.5.0";
 
 static char doc[]      = "simple snake game made with SDL2";
-static char args_doc[] = "all the arguments are optional";
 
 static struct argp_option options[] = {
-  { "cell_size", 's', "cs",  OPTION_ARG_OPTIONAL, "grid cell size",      1 },
-  { "col",       'c', "col", OPTION_ARG_OPTIONAL, "grid col cell count", 1 },
-  { "row",       'r', "row", OPTION_ARG_OPTIONAL, "grid row cell count", 1 },
-  { "fps",       'f', "fps", OPTION_ARG_OPTIONAL, "fps game is updated", 2 },
+  { "cell_size", 's', "CELL_SIZE",  OPTION_ARG_OPTIONAL, "grid cell size",      1 },
+  { "col",       'c', "COL",        OPTION_ARG_OPTIONAL, "grid col cell count", 1 },
+  { "row",       'r', "ROW",        OPTION_ARG_OPTIONAL, "grid row cell count", 1 },
+  { "fps",       'f', "FPS",        OPTION_ARG_OPTIONAL, "fps game is updated", 2 },
   { 0 }
 };
 
@@ -55,7 +54,7 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
   return 0;
 }
 
-static struct argp argp = { options, parse_opt, args_doc, doc, NULL, NULL, NULL };
+static struct argp argp = { options, parse_opt, NULL, doc, NULL, NULL, NULL };
 
 int main(int argc, char** argv)
 {
