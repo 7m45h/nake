@@ -13,7 +13,7 @@
 #define DEFAULT_GRID_CCC      64
 #define DEFAULT_GRID_RCC      32
 
-const char* argp_program_version = "1.5.0";
+const char* argp_program_version = "1.5.1";
 
 static char doc[]      = "simple snake game made with SDL2";
 
