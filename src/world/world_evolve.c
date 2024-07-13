@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include "../logger.h"
+#include "../sl_manager/sl_manager.h"
 #include "grid/grid.h"
 #include "world.h"
 
@@ -83,6 +84,10 @@ void* world_handle_events(void* vp_world)
           world->windowed = !world->windowed;
           SDL_SetWindowFullscreen(world->window, world->windowed ? SDL_WINDOW_FULLSCREEN : 0);
           SDL_ShowCursor(world->windowed ? SDL_DISABLE : SDL_ENABLE);
+          break;
+
+          case SDLK_s:
+          SLM_save(world);
           break;
 
           default:

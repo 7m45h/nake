@@ -1,6 +1,6 @@
 CC := gcc
 CPPFLAGS := -MMD
-LINK_LIBS := sdl2 SDL2_ttf
+LINK_LIBS := SDL2_ttf json-c sdl2
 CFLAGS := -Wall -Wextra -march=native $(shell pkg-config --cflags ${LINK_LIBS})
 LDFLAGS := $(shell pkg-config --libs ${LINK_LIBS})
 
