@@ -13,15 +13,15 @@
 #define DEFAULT_GRID_CCC      64
 #define DEFAULT_GRID_RCC      32
 
-const char* argp_program_version = "1.5.1";
+const char* argp_program_version = "1.5.5";
 
 static char doc[]      = "simple snake game made with SDL2";
 
 static struct argp_option options[] = {
-  { "cell_size", 's', "CELL_SIZE",  OPTION_ARG_OPTIONAL, "grid cell size",      1 },
-  { "col",       'c', "COL",        OPTION_ARG_OPTIONAL, "grid col cell count", 1 },
-  { "row",       'r', "ROW",        OPTION_ARG_OPTIONAL, "grid row cell count", 1 },
-  { "fps",       'f', "FPS",        OPTION_ARG_OPTIONAL, "fps game is updated", 2 },
+  { "cell_size", 's', "CELL_SIZE",  OPTION_ARG_OPTIONAL,      "grid cell size", 1 },
+  {       "col", 'c',       "COL",  OPTION_ARG_OPTIONAL, "grid col cell count", 1 },
+  {       "row", 'r',       "ROW",  OPTION_ARG_OPTIONAL, "grid row cell count", 1 },
+  {       "fps", 'f',       "FPS",  OPTION_ARG_OPTIONAL, "fps game is updated", 2 },
   { 0 }
 };
 
