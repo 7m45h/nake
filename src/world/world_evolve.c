@@ -91,7 +91,7 @@ void* world_handle_events(void* vp_world)
           break;
 
           case SDLK_r:
-          SLM_load(world);
+          if (SLM_load(world)) LOGG("SLM_load failed");
           break;
 
           default:
