@@ -91,7 +91,11 @@ void* world_handle_events(void* vp_world)
           break;
 
           case SDLK_r:
-          if (SLM_load(world)) LOGG("SLM_load failed");
+          if (SLM_load(world))
+          {
+            LOGG("SLM_load failed");
+            world->evolving = false;
+          }
           break;
 
           default:

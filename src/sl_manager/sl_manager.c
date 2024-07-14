@@ -101,7 +101,14 @@ int SLM_load(World* world)
   struct json_object* world_state = json_tokener_parse(json_string);
   free(json_string);
 
-  JTS_world(world_state, world);
+  int jts_status = JTS_world(world_state, world);
+  if (jts_status)
+  {
+    LOGG("JTS_world failed");
+    json_object_put(world_state);
+    return 1;
+  }
+
   json_object_put(world_state);
 
   return 0;
