@@ -1,5 +1,6 @@
 #include <json-c/json.h>
 #include <json-c/json_object.h>
+#include <json-c/json_tokener.h>
 #include <json-c/json_types.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +8,7 @@
 
 #include "../logger.h"
 #include "sl_manager.h"
+#include "json2struct/json2struct.h"
 #include "struct2json/struct2json.h"
 
 #define SAFE_FILE_PATH "./nake_save.json"
@@ -95,8 +97,12 @@ int SLM_load(World* world)
   fclose(save_file);
 
   json_string[json_string_length] = '\0';
-  puts(json_string);
+
+  struct json_object* world_state = json_tokener_parse(json_string);
   free(json_string);
+
+  JTS_world(world_state, world);
+  json_object_put(world_state);
 
   return 0;
 }
