@@ -87,7 +87,11 @@ void* world_handle_events(void* vp_world)
           break;
 
           case SDLK_s:
-          SLM_save(world);
+          if (SLM_save(world)) LOGG("SLM_save failed");
+          break;
+
+          case SDLK_r:
+          SLM_load(world);
           break;
 
           default:
