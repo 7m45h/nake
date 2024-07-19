@@ -13,7 +13,7 @@
 
 #define SAFE_FILE_PATH "./nake_save.json"
 
-int SLM_save(World* world)
+int SLM_save_state(World* world)
 {
   struct json_object* world_state = STJ_world(world);
   if (world_state == NULL)
@@ -47,7 +47,7 @@ int SLM_save(World* world)
   return 0;
 }
 
-int SLM_load(World* world)
+int SLM_load_state(World* world)
 {
   FILE* save_file = fopen(SAFE_FILE_PATH, "r");
   if (save_file == NULL)

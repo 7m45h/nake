@@ -86,17 +86,17 @@ void* world_handle_events(void* vp_world)
           SDL_ShowCursor(world->windowed ? SDL_DISABLE : SDL_ENABLE);
           break;
 
-          case SDLK_s:
-          if (SLM_save(world)) LOGG("SLM_save failed");
-          break;
+          // case SDLK_s:
+          // if (SLM_save(world)) LOGG("SLM_save failed");
+          // break;
 
-          case SDLK_r:
-          if (SLM_load(world))
-          {
-            LOGG("SLM_load failed");
-            world->evolving = false;
-          }
-          break;
+          // case SDLK_r:
+          // if (SLM_load(world))
+          // {
+          //   LOGG("SLM_load failed");
+          //   world->evolving = false;
+          // }
+          // break;
 
           default:
           world->crnt_key = world->event.key.keysym.sym;
