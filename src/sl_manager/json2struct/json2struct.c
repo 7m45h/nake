@@ -122,6 +122,32 @@ int JTS_nake(struct json_object* obj, Nake* nake)
   return 0;
 }
 
+int JTS_nconf(struct json_object* obj, NConf* nconf)
+{
+  struct json_object* cell_size      = NULL;
+  struct json_object* g_c_cell_count = NULL;
+  struct json_object* g_r_cell_count = NULL;
+  struct json_object* fps            = NULL;
+
+  bool get_ex_status = false;
+
+  get_ex_status = json_object_object_get_ex(obj,      "cell_size",      &cell_size);
+  KEY_EXIST(get_ex_status)
+  get_ex_status = json_object_object_get_ex(obj, "g_c_cell_count", &g_c_cell_count);
+  KEY_EXIST(get_ex_status)
+  get_ex_status = json_object_object_get_ex(obj, "g_r_cell_count", &g_r_cell_count);
+  KEY_EXIST(get_ex_status)
+  get_ex_status = json_object_object_get_ex(obj,            "fps",            &fps);
+  KEY_EXIST(get_ex_status)
+
+  nconf->cell_size      = json_object_get_int(cell_size);
+  nconf->g_c_cell_count = json_object_get_int(g_c_cell_count);
+  nconf->g_r_cell_count = json_object_get_int(g_r_cell_count);
+  nconf->fps            = json_object_get_int(fps);
+
+  return 0;
+}
+
 int JTS_sboard(struct json_object* obj, SBoard* sboard)
 {
   struct json_object* rect     = NULL;

@@ -5,10 +5,12 @@
 #include <json-c/json.h>
 #include <json-c/json_types.h>
 
+#include "../../nconf.h"
 #include "../../world/world.h"
 
 struct json_object* STJ_grid(Grid* grid);
 struct json_object* STJ_nake(Nake* nake);
+struct json_object* STJ_nconf(NConf* nconf);
 struct json_object* STJ_sboard(SBoard* sboard);
 struct json_object* STJ_sdlfpoint(SDL_FPoint* point);
 struct json_object* STJ_sdlfrect(SDL_FRect* rect);

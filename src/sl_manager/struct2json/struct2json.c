@@ -81,6 +81,25 @@ struct json_object* STJ_nake(Nake* nake)
   return obj;
 }
 
+struct json_object* STJ_nconf(NConf* nconf)
+{
+  struct json_object* obj = json_object_new_object();
+  if (obj != NULL)
+  {
+    int status = 0;
+    status = json_object_object_add(obj,      "cell_size",      json_object_new_int(nconf->cell_size));
+    CHECK_ERR(status)
+    status = json_object_object_add(obj, "g_c_cell_count", json_object_new_int(nconf->g_c_cell_count));
+    CHECK_ERR(status)
+    status = json_object_object_add(obj, "g_r_cell_count", json_object_new_int(nconf->g_r_cell_count));
+    CHECK_ERR(status)
+    status = json_object_object_add(obj,            "fps",            json_object_new_int(nconf->fps));
+    CHECK_ERR(status)
+  }
+
+  return obj;
+}
+
 struct json_object* STJ_sboard(SBoard* sboard)
 {
   struct json_object* obj = json_object_new_object();
