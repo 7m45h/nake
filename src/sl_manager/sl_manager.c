@@ -19,16 +19,16 @@
 
 int SLM_save_state(World* world)
 {
-  struct json_object* world_state = STJ_world(world);
-  if (world_state == NULL)
+  struct json_object* obj = STJ_world(world);
+  if (obj == NULL)
   {
     LOGG("STJ_world failed");
     return 1;
   }
 
-  const char* world_state_serialized = json_object_to_json_string(world_state);
-  int status = FM_write(STATE_SAVE_FILE_PATH, sizeof(char), strlen(world_state_serialized), world_state_serialized);
-  json_object_put(world_state);
+  const char* obj_str = json_object_to_json_string(obj);
+  int status = FM_write(STATE_SAVE_FILE_PATH, sizeof(char), strlen(obj_str), obj_str);
+  json_object_put(obj);
 
   if (status != 0)
   {
@@ -52,17 +52,17 @@ int SLM_load_state(World* world)
 
   json_string[json_string_length + 1] = '\0';
 
-  struct json_object* world_state = json_tokener_parse(json_string);
+  struct json_object* obj = json_tokener_parse(json_string);
   free(json_string);
 
-  if (world_state == NULL)
+  if (obj == NULL)
   {
     LOGG("json_tokener_parse failed");
     return 1;
   }
 
-  int jts_status = JTS_world(world_state, world);
-  json_object_put(world_state);
+  int jts_status = JTS_world(obj, world);
+  json_object_put(obj);
 
   if (jts_status)
   {
