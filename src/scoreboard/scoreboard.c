@@ -18,7 +18,7 @@ static const SDL_Colour color_fg = { COLOR_FG, SDL_ALPHA_OPAQUE };
 static TTF_Font* terminus_font    = NULL;
 static SDL_Surface* score_surface = NULL;
 
-int SBOARD_init(SBoard* sboard, Grid* grid)
+int SBOARD_init(Grid* grid)
 {
   terminus_font = TTF_OpenFont(TERMINUS_FONT_PATH, grid->cell_size * SCORE_FONT_RATIO);
   if (terminus_font == NULL)
@@ -27,8 +27,6 @@ int SBOARD_init(SBoard* sboard, Grid* grid)
     LOGG("TTF_OpenFont failed");
     return 1;
   }
-
-  sboard->outdated = true;
 
   return 0;
 }
@@ -63,8 +61,6 @@ void SBOARD_update(SBoard* sboard, int score, SDL_Renderer* renderer, SDL_Rect* 
   sboard->rect.y = window_dim->h - grid->outer_rect.y + (score_surface->h * 0.5);
   sboard->rect.w = score_surface->w;
   sboard->rect.h = score_surface->h;
-
-  sboard->outdated = false;
 }
 
 void SBOARD_deinit(SBoard* sboard)

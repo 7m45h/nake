@@ -150,22 +150,17 @@ int JTS_nconf(struct json_object* obj, NConf* nconf)
 
 int JTS_sboard(struct json_object* obj, SBoard* sboard)
 {
-  struct json_object* rect     = NULL;
-  struct json_object* outdated = NULL;
+  struct json_object* rect = NULL;
 
   bool get_ex_status = false;
 
   get_ex_status = json_object_object_get_ex(obj,     "rect",     &rect);
-  KEY_EXIST(get_ex_status)
-  get_ex_status = json_object_object_get_ex(obj, "outdated", &outdated);
   KEY_EXIST(get_ex_status)
 
   int jts_status = 0;
 
   jts_status = JTS_sdlfrect(rect, &sboard->rect);
   CHECK_JTS_ERR(jts_status)
-
-  sboard->outdated = json_object_get_boolean(outdated);
 
   return 0;
 }

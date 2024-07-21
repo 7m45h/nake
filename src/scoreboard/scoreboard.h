@@ -11,9 +11,8 @@ typedef struct
 {
   SDL_Texture* texture;
   SDL_FRect       rect;
-  bool        outdated;
 } SBoard;
 
-int  SBOARD_init(SBoard* sboard, Grid* grid);
+int  SBOARD_init(Grid* grid);
 void SBOARD_update(SBoard* sboard, int score, SDL_Renderer* renderer, SDL_Rect* window_dim, Grid* grid);
 void SBOARD_deinit(SBoard* sboard);

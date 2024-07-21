@@ -21,7 +21,7 @@ bool world_init(World* world)
     return false;
   }
 
-  int sboard_status = SBOARD_init(&world->sboard, &world->grid);
+  int sboard_status = SBOARD_init(&world->grid);
   if (sboard_status != 0)
   {
     LOGG("SBOARD_init failed");
@@ -57,7 +57,7 @@ void world_handle_events(World* world)
         GRID_handle_window_resize(&world->grid, &world->window_dimensions);
         APPLE_handle_grid_resize(&world->apple, &world->grid);
         NAKE_handle_grid_resize(&world->nake, &world->grid);
-        world->sboard.outdated = true;
+        SBOARD_update(&world->sboard, world->nake.score, world->renderer, &world->window_dimensions, &world->grid);
         break;
       }
       break;
@@ -89,7 +89,7 @@ void world_update(World* world)
   if (NAKE_eat_apple(&world->nake, &world->apple))
   {
     APPLE_set_random_position(&world->apple, &world->grid);
-    world->sboard.outdated = true;
+    SBOARD_update(&world->sboard, world->nake.score, world->renderer, &world->window_dimensions, &world->grid);
   }
 }
 
@@ -107,12 +107,12 @@ void world_render(World* world)
   // apple
   SDL_SetRenderDrawColor(world->renderer, COLOR_FG, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(world->renderer, &world->apple);
+
   // nake
   SDL_RenderFillRectF(world->renderer, &world->nake.rect);
   SDL_RenderFillRectsF(world->renderer, world->nake.tail, world->nake.score);
 
   // score board
-  if (world->sboard.outdated) SBOARD_update(&world->sboard, world->nake.score, world->renderer, &world->window_dimensions, &world->grid);
   SDL_RenderCopyF(world->renderer, world->sboard.texture, NULL, &world->sboard.rect);
 
   SDL_RenderPresent(world->renderer);

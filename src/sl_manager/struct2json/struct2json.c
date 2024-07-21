@@ -108,8 +108,6 @@ struct json_object* STJ_sboard(SBoard* sboard)
     int status = 0;
     status = json_object_object_add(obj,     "rect",               STJ_sdlfrect(&sboard->rect));
     CHECK_ERR(status)
-    status = json_object_object_add(obj, "outdated", json_object_new_boolean(sboard->outdated));
-    CHECK_ERR(status)
   }
 
   return obj;
