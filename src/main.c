@@ -14,7 +14,7 @@
 #define DEFAULT_GRID_CCC      64
 #define DEFAULT_GRID_RCC      32
 
-const char* argp_program_version = "1.5.5";
+const char* argp_program_version = "2.0.1";
 
 static char doc[]      = "simple snake game made with SDL2";
 
@@ -68,23 +68,13 @@ int main(int argc, char** argv)
     DEFAULT_WINDOW_FPS
   };
 
+  int slm_status = SLM_load_nconf(&conf);
+  if (slm_status) LOGG("SLM_load_nconf failed");
+
   argp_parse(&argp, argc, argv, 0, NULL, &conf);
 
-  if (
-    conf.cell_size != DEFAULT_GRID_CELLSIZE ||
-    conf.g_c_cell_count != DEFAULT_GRID_CCC ||
-    conf.g_r_cell_count != DEFAULT_GRID_RCC ||
-    conf.fps != DEFAULT_WINDOW_FPS
-  )
-  {
-    int status = SLM_save_nconf(&conf);
-    if (status) LOGG("SLM_save_nconf failed");
-  }
-  else
-  {
-    int status = SLM_load_nconf(&conf);
-    if (status) LOGG("SLM_load_nconf failed");
-  }
+  slm_status = SLM_save_nconf(&conf);
+  if (slm_status) LOGG("SLM_save_nconf failed");
 
   World* world = WORLD_form(DEFAULT_WINDOW_TITLE, conf.cell_size, conf.g_c_cell_count, conf.g_r_cell_count, conf.fps);
   if (world == NULL)
