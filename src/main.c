@@ -4,6 +4,7 @@
 
 #include "logger.h"
 #include "nconf.h"
+#include "sl_manager/sl_manager.h"
 #include "world/world.h"
 
 #define DEFAULT_WINDOW_TITLE  "nake"
@@ -68,6 +69,22 @@ int main(int argc, char** argv)
   };
 
   argp_parse(&argp, argc, argv, 0, NULL, &conf);
+
+  if (
+    conf.cell_size != DEFAULT_GRID_CELLSIZE ||
+    conf.g_c_cell_count != DEFAULT_GRID_CCC ||
+    conf.g_r_cell_count != DEFAULT_GRID_RCC ||
+    conf.fps != DEFAULT_WINDOW_FPS
+  )
+  {
+    int status = SLM_save_nconf(&conf);
+    if (status) LOGG("SLM_save_nconf failed");
+  }
+  else
+  {
+    int status = SLM_load_nconf(&conf);
+    if (status) LOGG("SLM_load_nconf failed");
+  }
 
   World* world = WORLD_form(DEFAULT_WINDOW_TITLE, conf.cell_size, conf.g_c_cell_count, conf.g_r_cell_count, conf.fps);
   if (world == NULL)
