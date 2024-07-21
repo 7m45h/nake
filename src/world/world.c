@@ -1,10 +1,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
-#include <bits/pthreadtypes.h>
-#include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -94,16 +94,32 @@ void WORLD_evolve(World* world)
 {
   world->evolving = world_init(world);
 
-  pthread_t  event_thread;
-  pthread_t update_thread;
+  Uint64 frame_start_time = 0;
+  Uint64 frame_duration   = 0;
+  Uint64 event_ticker     = world->event_hanlde_time;
+  Uint64 update_ticker    = world->update_time;
+  while (world->evolving)
+  {
+    frame_start_time = SDL_GetTicks64();
 
-  pthread_create(&event_thread,  NULL, world_handle_events, world);
-  pthread_create(&update_thread, NULL, world_update,        world);
+    if (event_ticker >= world->event_hanlde_time)
+    {
+      event_ticker = 0;
+      world_handle_events(world);
+    }
+    else event_ticker += frame_duration;
 
-  while (world->evolving) world_render(world);
+    if (update_ticker >= world->update_time)
+    {
+      update_ticker = 0;
+      world_update(world);
+    }
+    else update_ticker += frame_duration;
 
-  pthread_join(event_thread,  NULL);
-  pthread_join(update_thread, NULL);
+    world_render(world);
+
+    frame_duration = SDL_GetTicks64() - frame_start_time;
+  }
 
   world_deinit(world);
 }
