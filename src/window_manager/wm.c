@@ -69,6 +69,8 @@ void WINDOW_destroy(Window** window)
     SDL_DestroyWindow((*window)->window);
     (*window)->window = NULL;
     free(*window);
+    SDL_Quit();
     *window = NULL;
+    LOGG("window destroyed!");
   }
 }
