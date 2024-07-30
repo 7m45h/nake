@@ -34,6 +34,14 @@ Grid* GRID_create(SDL_Point* window_dim, int cs, int ccx, int ccy)
   return grid;
 }
 
+void  GRID_align_center(Grid* grid, SDL_Point* window_dim)
+{
+  grid->outer_rect.x = (window_dim->x - grid->outer_rect.w) * 0.5;
+  grid->outer_rect.y = (window_dim->y - grid->outer_rect.h) * 0.5;
+  grid->inner_rect.x = (window_dim->x - grid->inner_rect.w) * 0.5;
+  grid->inner_rect.y = (window_dim->y - grid->inner_rect.h) * 0.5;
+}
+
 void  GRID_destroy(Grid** grid)
 {
   if (grid != NULL && *grid != NULL)

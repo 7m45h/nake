@@ -81,6 +81,18 @@ void WINDOW_update_events(Window* window, STTevents* events)
         break;
       }
       break;
+
+      case SDL_WINDOWEVENT:
+      switch (window->event.window.event)
+      {
+        case SDL_WINDOWEVENT_RESIZED:
+        case SDL_WINDOWEVENT_SIZE_CHANGED:
+        window->dimensions.x     = window->event.window.data1;
+        window->dimensions.y     = window->event.window.data2;
+        events->window_resize    = true;
+        break;
+      }
+      break;
     }
   }
 }

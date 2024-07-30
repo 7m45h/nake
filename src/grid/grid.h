@@ -12,4 +12,5 @@ typedef struct
 } Grid;
 
 Grid* GRID_create(SDL_Point* window_dim, int cs, int ccx, int ccy);
+void  GRID_align_center(Grid* grid, SDL_Point* window_dim);
 void  GRID_destroy(Grid** grid);

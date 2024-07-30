@@ -6,11 +6,12 @@
 
 typedef struct
 {
-  bool quit;
+  bool          quit;
+  bool window_resize;
   struct
   {
     bool q;
-  } input;
+  }            input;
 } STTevents;
 
 typedef struct

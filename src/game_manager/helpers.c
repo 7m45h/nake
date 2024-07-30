@@ -28,4 +28,10 @@ void game_handle_events(Game* game)
   WINDOW_update_events(game->window, &game->events);
 
   if (game->events.quit || game->events.input.q) game->running = false;
+
+  if (game->events.window_resize) GRID_align_center(game->entities.grid, &game->window->dimensions);
+
+  game->events.window_resize = false;
+  game->events.input.q       = false;
+  game->events.quit          = false;
 }
