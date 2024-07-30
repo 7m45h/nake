@@ -41,6 +41,7 @@ Window* WINDOW_create(const char* title)
     return NULL;
   }
 
+  window->refresh_rate = display_info.refresh_rate;
   window->dimensions.x = display_info.w;
   window->dimensions.y = display_info.h;
 

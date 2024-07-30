@@ -10,10 +10,11 @@
 
 typedef struct
 {
-  SDL_Point     dimensions;
-  SDL_Window*       window;
-  SDL_Renderer*   renderer;
-  SDL_Event          event;
+  int       refresh_rate;
+  SDL_Point   dimensions;
+  SDL_Window*     window;
+  SDL_Renderer* renderer;
+  SDL_Event        event;
 } Window;
 
 Window* WINDOW_create(const char* title);

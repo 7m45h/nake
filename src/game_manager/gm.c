@@ -1,3 +1,5 @@
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_timer.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -8,7 +10,9 @@
 #include "helpers.h"
 #include "gm.h"
 
-Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy)
+#define ONE_SEC_IN_MILI 1000.0f
+
+Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy, int update_interval)
 {
   Game* game = calloc(1, sizeof(Game));
   if (game == NULL)
@@ -33,6 +37,9 @@ Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy)
     return NULL;
   }
 
+  game->event_poll_interval = ONE_SEC_IN_MILI / game->window->refresh_rate;
+  game->update_interval     = ONE_SEC_IN_MILI / update_interval;
+
   return game;
 }
 
@@ -40,10 +47,24 @@ void GAME_run(Game* game)
 {
   game->running = true;
 
+  Uint64 frame_start_time = 0;
+  Uint64 frame_duration   = 0;
+  Uint64 event_ticker     = game->event_poll_interval;
+  // Uint64 update_ticker    = game->update_interval;
   while (game->running)
   {
-    game_handle_events(game);
+    frame_start_time = SDL_GetTicks64();
+
+    if (event_ticker >= game->event_poll_interval)
+    {
+      event_ticker = 0;
+      game_handle_events(game);
+    }
+    else event_ticker += frame_duration;
+
     WINDOW_update_screen(game->window, &game->entities);
+
+    frame_duration = SDL_GetTicks64() - frame_start_time;
   }
 }
 
