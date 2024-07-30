@@ -1,3 +1,6 @@
+#include <stdbool.h>
+#include <time.h>
+
 #include "../logger.h"
 #include "helpers.h"
 #include "gm.h"
