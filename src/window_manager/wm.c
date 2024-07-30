@@ -62,15 +62,15 @@ void WINDOW_destroy(Window** window)
 {
   if (window != NULL && *window != NULL)
   {
-    (*window)->dimensions.x = 0;
-    (*window)->dimensions.y = 0;
     SDL_DestroyRenderer((*window)->renderer);
     (*window)->renderer = NULL;
+
     SDL_DestroyWindow((*window)->window);
     (*window)->window = NULL;
+
     free(*window);
-    SDL_Quit();
     *window = NULL;
-    LOGG("window destroyed!");
+
+    SDL_Quit();
   }
 }
