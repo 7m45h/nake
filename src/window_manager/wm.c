@@ -1,8 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <errno.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -56,6 +60,36 @@ Window* WINDOW_create(const char* title)
   }
 
   return window;
+}
+
+void WINDOW_update_events(Window* window, STTevents* event)
+{
+  while (SDL_PollEvent(&window->event))
+  {
+    switch (window->event.type)
+    {
+      case SDL_QUIT:
+      event->quit = true;
+      break;
+
+      case SDL_KEYDOWN:
+      switch (window->event.key.keysym.sym)
+      {
+        case SDLK_q:
+        event->input.q = true;
+        break;
+      }
+      break;
+    }
+  }
+}
+
+void WINDOW_update_screen(Window* window)
+{
+  SDL_SetRenderDrawColor(window->renderer, 0x00, 0xb1, 0x40, SDL_ALPHA_OPAQUE);
+  SDL_RenderClear(window->renderer);
+
+  SDL_RenderPresent(window->renderer);
 }
 
 void WINDOW_destroy(Window** window)

@@ -7,9 +7,17 @@
 #include "../logger.h"
 #include "gm.h"
 
+static void game_handle_events(Game* game)
+{
+  WINDOW_update_events(game->window, &game->event);
+
+  if (game->event.quit)    game->running = false;
+  if (game->event.input.q) game->running = false;
+}
+
 Game* GAME_create(const char* title)
 {
-  Game* game = malloc(sizeof(Game));
+  Game* game = calloc(1, sizeof(Game));
   if (game == NULL)
   {
     LOGGERR("malloc", errno, strerror(errno));
@@ -24,9 +32,18 @@ Game* GAME_create(const char* title)
     return NULL; 
   }
 
-  game->running = false;
-
   return game;
+}
+
+void GAME_run(Game* game)
+{
+  game->running = true;
+
+  while (game->running)
+  {
+    game_handle_events(game);
+    WINDOW_update_screen(game->window);
+  }
 }
 
 void GAME_destroy(Game** game)

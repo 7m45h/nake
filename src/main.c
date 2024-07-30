@@ -1,18 +1,20 @@
+#include <stdlib.h>
 #include <time.h>
 
+#include "game_manager/gm.h"
 #include "logger.h"
-#include "window_manager/wm.h"
 
 int main(void)
 {
-  Window* window = WINDOW_create("nake");
-  if (window == NULL)
+  Game* game = GAME_create("nake");
+  if (game == NULL)
   {
-    LOGGERR("WINDOW_create", 0, "");
+    LOGGERR("GAME_create", 0, "");
     return EXIT_FAILURE;
   }
 
-  WINDOW_destroy(&window);
+  GAME_run(game);
+  GAME_destroy(&game);
 
   return EXIT_SUCCESS;
 }
