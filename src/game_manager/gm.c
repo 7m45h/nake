@@ -5,14 +5,8 @@
 #include <time.h>
 
 #include "../logger.h"
+#include "helpers.h"
 #include "gm.h"
-
-static void game_handle_events(Game* game)
-{
-  WINDOW_update_events(game->window, &game->events);
-
-  if (game->events.quit || game->events.input.q) game->running = false;
-}
 
 Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy)
 {
@@ -31,10 +25,10 @@ Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy)
     return NULL; 
   }
 
-  game->entities.grid = GRID_create(&game->window->dimensions, g_cs, g_ccx, g_ccy);
-  if (game->entities.grid == NULL)
+  int entity_status = game_populate_entities(game, g_cs, g_ccx, g_ccy);
+  if (entity_status != 0)
   {
-    LOGGERR("GRID_create", 0, "");
+    LOGGERR("game_populate_entities", 0, "");
     GAME_destroy(&game);
     return NULL;
   }
@@ -58,7 +52,7 @@ void GAME_destroy(Game** game)
   if (game != NULL && *game != NULL)
   {
     WINDOW_destroy(&(*game)->window);
-    GRID_destroy(&(*game)->entities.grid);
+    game_depopulate_entities(*game);
 
     free(*game);
     *game = NULL;
