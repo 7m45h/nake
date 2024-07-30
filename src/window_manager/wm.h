@@ -17,6 +17,6 @@ typedef struct
 } Window;
 
 Window* WINDOW_create(const char* title);
-void    WINDOW_update_events(Window* window, STTevents* event);
-void    WINDOW_update_screen(Window* window);
+void    WINDOW_update_events(Window* window, STTevents* events);
+void    WINDOW_update_screen(Window* window, STTentities* entities);
 void    WINDOW_destroy(Window** window);

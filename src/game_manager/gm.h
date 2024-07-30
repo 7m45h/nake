@@ -7,11 +7,12 @@
 
 typedef struct
 {
-  Window*  window;
-  STTevents event;
-  bool    running;
+  Window*       window;
+  STTevents     events;
+  STTentities entities;
+  bool         running;
 } Game;
 
-Game* GAME_create(const char* title);
+Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy);
 void  GAME_run(Game* game);
 void  GAME_destroy(Game** game);
