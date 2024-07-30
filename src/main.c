@@ -8,7 +8,7 @@ int main(void)
   Window* window = WINDOW_create("nake");
   if (window == NULL)
   {
-    LOGG("WINDOW_create failed");
+    LOGGERR("WINDOW_create", 0, "");
     return EXIT_FAILURE;
   }
 
