@@ -77,6 +77,11 @@ void GAME_run(Game* game)
 
     frame_duration = SDL_GetTicks64() - frame_start_time;
   }
+
+  if (game->interrupt)
+  {
+    LOGG("game loop interrupted!");
+  }
 }
 
 void GAME_destroy(Game** game)

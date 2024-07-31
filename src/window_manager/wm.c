@@ -4,6 +4,7 @@
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -28,6 +29,14 @@ Window* WINDOW_create(const char* title)
   if (sdl_status != 0)
   {
     LOGGERR("SDL_Init", sdl_status, SDL_GetError());
+    WINDOW_destroy(&window);
+    return NULL;
+  }
+
+  int ttf_status = TTF_Init();
+  if (ttf_status != 0)
+  {
+    LOGGERR("TTF_Init", 0, TTF_GetError());
     WINDOW_destroy(&window);
     return NULL;
   }
@@ -126,6 +135,9 @@ void WINDOW_update_screen(Window* window, STTentities* entities)
   // apple
   SDL_RenderFillRectF(window->renderer, &entities->apple);
 
+  // hud
+  SDL_RenderCopyF(window->renderer, entities->hud.score_board, NULL, &entities->hud.score_board_rect);
+
   SDL_RenderPresent(window->renderer);
 }
 
@@ -142,6 +154,7 @@ void WINDOW_destroy(Window** window)
     free(*window);
     *window = NULL;
 
+    TTF_Quit();
     SDL_Quit();
   }
 }

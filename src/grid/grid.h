@@ -10,6 +10,7 @@ typedef struct
   SDL_FRect        outer_rect;
   SDL_FRect        inner_rect;
   SDL_FPoint           offset;
+  SDL_FPoint outer_rect_bound;
   SDL_FPoint inner_rect_bound;
 } Grid;
 
