@@ -5,11 +5,12 @@
 
 typedef struct
 {
-  int        cell_size;
-  SDL_Point cell_count;
-  SDL_FRect outer_rect;
-  SDL_FRect inner_rect;
-  SDL_FPoint    offset;
+  int               cell_size;
+  SDL_Point        cell_count;
+  SDL_FRect        outer_rect;
+  SDL_FRect        inner_rect;
+  SDL_FPoint           offset;
+  SDL_FPoint inner_rect_bound;
 } Grid;
 
 Grid* GRID_create(SDL_Point* window_dim, int cs, int ccx, int ccy);

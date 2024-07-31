@@ -35,8 +35,6 @@ void game_depopulate_entities(Game* game)
 
 void game_handle_events(Game* game)
 {
-  WINDOW_update_events(game->window, &game->events);
-
   if (game->events.quit || game->events.key == SDLK_q) game->running = false;
 
   if (game->events.window_resize)
@@ -45,6 +43,9 @@ void game_handle_events(Game* game)
     NAKE_counter_offset(game->entities.nake, game->entities.grid);
     game->events.window_resize = false;
   }
+}
 
-  game->events.key = SDLK_UNKNOWN;
+void game_update(Game* game)
+{
+  NAKE_update(game->entities.nake, game->entities.grid, game->events.key);
 }

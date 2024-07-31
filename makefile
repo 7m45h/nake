@@ -2,7 +2,7 @@ CC := gcc
 CPPFLAGS := -MMD
 LINK_LIBS := sdl2
 CFLAGS := -Wall -Wextra -march=native
-LDFLAGS :=
+LDFLAGS := -lm
 
 ifdef LINK_LIBS
 CFLAGS += $(shell pkg-config --cflags ${LINK_LIBS})

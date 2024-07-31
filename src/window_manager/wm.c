@@ -103,6 +103,20 @@ void WINDOW_update_screen(Window* window, STTentities* entities)
   SDL_RenderFillRectF(window->renderer, &entities->grid->outer_rect);
   SDL_SetRenderDrawColor(window->renderer, COLOR_GREEN, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(window->renderer, &entities->grid->inner_rect);
+  SDL_SetRenderDrawColor(window->renderer, COLOR_BLACK, SDL_ALPHA_OPAQUE);
+  // // grid lines
+  // float line_x = 0;
+  // float line_y = 0;
+  // for (int x = 1; x < entities->grid->cell_count.x; x++)
+  // {
+  //   line_x = x * entities->grid->cell_size + entities->grid->inner_rect.x;
+  //   SDL_RenderDrawLineF(window->renderer, line_x, entities->grid->inner_rect.y, line_x, entities->grid->inner_rect_bound.y);
+  // }
+  // for (int y = 1; y < entities->grid->cell_count.y; y++)
+  // {
+  //   line_y = y * entities->grid->cell_size + entities->grid->inner_rect.y;
+  //   SDL_RenderDrawLineF(window->renderer, entities->grid->inner_rect.x, line_y, entities->grid->inner_rect_bound.x, line_y);
+  // }
 
   // nake
   SDL_SetRenderDrawColor(window->renderer, COLOR_BLACK, SDL_ALPHA_OPAQUE);

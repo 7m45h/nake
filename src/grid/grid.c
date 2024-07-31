@@ -32,6 +32,9 @@ Grid* GRID_create(SDL_Point* window_dim, int cs, int ccx, int ccy)
   grid->inner_rect.w = grid->outer_rect.w - cell_size_double;
   grid->inner_rect.h = grid->outer_rect.h - cell_size_double;
 
+  grid->inner_rect_bound.x = grid->inner_rect.x + grid->inner_rect.w;
+  grid->inner_rect_bound.y = grid->inner_rect.y + grid->inner_rect.h;
+
   return grid;
 }
 
@@ -48,6 +51,9 @@ void  GRID_align_center(Grid* grid, SDL_Point* window_dim)
 
   grid->inner_rect.x += grid->offset.x;
   grid->inner_rect.y += grid->offset.y;
+
+  grid->inner_rect_bound.x = grid->inner_rect.x + grid->inner_rect.w;
+  grid->inner_rect_bound.y = grid->inner_rect.y + grid->inner_rect.h;
 }
 
 void  GRID_destroy(Grid** grid)

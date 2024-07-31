@@ -50,7 +50,7 @@ void GAME_run(Game* game)
   Uint64 frame_start_time = 0;
   Uint64 frame_duration   = 0;
   Uint64 event_ticker     = game->event_poll_interval;
-  // Uint64 update_ticker    = game->update_interval;
+  Uint64 update_ticker    = game->update_interval;
   while (game->running)
   {
     frame_start_time = SDL_GetTicks64();
@@ -58,9 +58,17 @@ void GAME_run(Game* game)
     if (event_ticker >= game->event_poll_interval)
     {
       event_ticker = 0;
+      WINDOW_update_events(game->window, &game->events);
       game_handle_events(game);
     }
     else event_ticker += frame_duration;
+
+    if (update_ticker >= game->update_interval)
+    {
+      update_ticker = 0;
+      game_update(game);
+    }
+    else update_ticker += frame_duration;
 
     WINDOW_update_screen(game->window, &game->entities);
 
