@@ -104,6 +104,10 @@ void WINDOW_update_screen(Window* window, STTentities* entities)
   SDL_SetRenderDrawColor(window->renderer, COLOR_GREEN, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(window->renderer, &entities->grid->inner_rect);
 
+  // nake
+  SDL_SetRenderDrawColor(window->renderer, COLOR_BLACK, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRectF(window->renderer, &entities->nake->rect);
+
   SDL_RenderPresent(window->renderer);
 }
 

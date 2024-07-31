@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "../grid/grid.h"
+#include "../nake/nake.h"
 
 typedef struct
 {
@@ -15,4 +16,5 @@ typedef struct
 typedef struct
 {
   Grid* grid;
+  Nake* nake;
 } STTentities;

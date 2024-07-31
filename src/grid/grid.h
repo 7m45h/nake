@@ -9,6 +9,7 @@ typedef struct
   SDL_Point cell_count;
   SDL_FRect outer_rect;
   SDL_FRect inner_rect;
+  SDL_FPoint    offset;
 } Grid;
 
 Grid* GRID_create(SDL_Point* window_dim, int cs, int ccx, int ccy);
