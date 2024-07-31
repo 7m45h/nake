@@ -75,12 +75,7 @@ void WINDOW_update_events(Window* window, STTevents* events)
       break;
 
       case SDL_KEYDOWN:
-      switch (window->event.key.keysym.sym)
-      {
-        case SDLK_q:
-        events->input.q = true;
-        break;
-      }
+      events->key = window->event.key.keysym.sym;
       break;
 
       case SDL_WINDOWEVENT:

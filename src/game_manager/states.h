@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL_keycode.h>
 #include <stdbool.h>
 
 #include "../grid/grid.h"
@@ -8,10 +9,7 @@ typedef struct
 {
   bool          quit;
   bool window_resize;
-  struct
-  {
-    bool q;
-  }            input;
+  SDL_Keycode    key;
 } STTevents;
 
 typedef struct
