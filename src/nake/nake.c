@@ -44,10 +44,16 @@ Nake* NAKE_create(Grid* grid)
   return nake;
 }
 
-void NAKE_counter_offset(Nake* nake, Grid* grid)
+void NAKE_counter_offset(Nake* nake, SDL_FPoint* offset)
 {
-  nake->rect.x += grid->offset.x;
-  nake->rect.y += grid->offset.y;
+  nake->rect.x += offset->x;
+  nake->rect.y += offset->y;
+
+  for (size_t i = 0; i < nake->tail_len; i++)
+  {
+    nake->tail[i].x += offset->x;
+    nake->tail[i].y += offset->y;
+  }
 }
 
 void NAKE_update(Nake* nake, Grid* grid, SDL_Keycode key)

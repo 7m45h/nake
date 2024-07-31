@@ -28,7 +28,7 @@ typedef struct
 } Nake;
 
 Nake* NAKE_create(Grid* grid);
-void  NAKE_counter_offset(Nake* nake, Grid* grid);
+void  NAKE_counter_offset(Nake* nake, SDL_FPoint* offset);
 void  NAKE_update(Nake* nake, Grid* grid, SDL_Keycode key);
 FEAST NAKE_eat_apple(Nake* nake, Apple* apple);
 void  NAKE_free(Nake** nake);

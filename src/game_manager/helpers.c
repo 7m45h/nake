@@ -59,7 +59,7 @@ void game_handle_events(Game* game)
   if (game->events.window_resize)
   {
     GRID_align_center(game->entities.grid, &game->window->dimensions);
-    NAKE_counter_offset(game->entities.nake, game->entities.grid);
+    NAKE_counter_offset(game->entities.nake, &game->entities.grid->offset);
     APPLE_counter_offset(&game->entities.apple, &game->entities.grid->offset);
     HUD_counter_offset(&game->entities.hud, &game->entities.grid->offset);
     game->events.window_resize = false;
