@@ -24,6 +24,8 @@ int game_populate_entities(Game* game, int g_cs, int g_ccx, int g_ccy)
     return 1;
   }
 
+  APPLE_init(&game->entities.apple, game->entities.grid);
+
   return 0;
 }
 
@@ -41,6 +43,7 @@ void game_handle_events(Game* game)
   {
     GRID_align_center(game->entities.grid, &game->window->dimensions);
     NAKE_counter_offset(game->entities.nake, game->entities.grid);
+    APPLE_counter_offset(&game->entities.apple, &game->entities.grid->offset);
     game->events.window_resize = false;
   }
 }
@@ -48,4 +51,9 @@ void game_handle_events(Game* game)
 void game_update(Game* game)
 {
   NAKE_update(game->entities.nake, game->entities.grid, game->events.key);
+  FEAST feast = NAKE_eat_apple(game->entities.nake, &game->entities.apple);
+  if (feast == ATE)
+    APPLE_set_rand_position(&game->entities.apple, game->entities.grid);
+  else if (feast == ERROR)
+    game->interrupt = true;
 }

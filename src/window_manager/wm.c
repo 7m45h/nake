@@ -121,6 +121,10 @@ void WINDOW_update_screen(Window* window, STTentities* entities)
   // nake
   SDL_SetRenderDrawColor(window->renderer, COLOR_BLACK, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRectF(window->renderer, &entities->nake->rect);
+  SDL_RenderFillRectsF(window->renderer, entities->nake->tail, entities->nake->tail_len);
+
+  // apple
+  SDL_RenderFillRectF(window->renderer, &entities->apple);
 
   SDL_RenderPresent(window->renderer);
 }

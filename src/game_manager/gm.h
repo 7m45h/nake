@@ -11,6 +11,7 @@ typedef struct
   STTevents          events;
   STTentities      entities;
   bool              running;
+  bool            interrupt;
   float event_poll_interval;
   float     update_interval;
 } Game;

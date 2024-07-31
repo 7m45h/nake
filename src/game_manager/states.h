@@ -3,6 +3,7 @@
 #include <SDL2/SDL_keycode.h>
 #include <stdbool.h>
 
+#include "../apple/apple.h"
 #include "../grid/grid.h"
 #include "../nake/nake.h"
 
@@ -15,6 +16,7 @@ typedef struct
 
 typedef struct
 {
-  Grid* grid;
-  Nake* nake;
+  Grid*  grid;
+  Nake*  nake;
+  Apple apple;
 } STTentities;

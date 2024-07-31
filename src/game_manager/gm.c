@@ -37,6 +37,8 @@ Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy, int update_
     return NULL;
   }
 
+  game->running             = false;
+  game->interrupt           = false;
   game->event_poll_interval = ONE_SEC_IN_MILI / game->window->refresh_rate;
   game->update_interval     = ONE_SEC_IN_MILI / update_interval;
 
@@ -67,6 +69,7 @@ void GAME_run(Game* game)
     {
       update_ticker = 0;
       game_update(game);
+      if (game->interrupt) break;
     }
     else update_ticker += frame_duration;
 
@@ -80,8 +83,8 @@ void GAME_destroy(Game** game)
 {
   if (game != NULL && *game != NULL)
   {
-    WINDOW_destroy(&(*game)->window);
     game_depopulate_entities(*game);
+    WINDOW_destroy(&(*game)->window);
 
     free(*game);
     *game = NULL;
