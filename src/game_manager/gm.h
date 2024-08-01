@@ -18,6 +18,7 @@ typedef struct
   float     update_interval;
 } Game;
 
+int   GAME_load(STTiconf* conf);
 Game* GAME_create(const char* title, STTiconf* conf);
 void  GAME_run(Game* game);
 void  GAME_destroy(Game** game);

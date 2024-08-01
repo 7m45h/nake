@@ -86,8 +86,8 @@ void game_update(Game* game)
 
 int game_save(STTiconf* conf)
 {
-  char data_str[32] = "";
-  int status = sprintf(data_str, "%04X%04X%04X%04X%04X\n", conf->grid_cell_size, conf->grid_cell_count_x, conf->grid_cell_count_y, conf->update_interval, conf->p_high_score);
+  char data_str[48] = "";
+  int status = sprintf(data_str, "%08X %08X %08X %08X %08X\n", conf->grid_cell_size, conf->grid_cell_count_x, conf->grid_cell_count_y, conf->update_interval, conf->p_high_score);
   if (status < 0)
   {
     LOGGERR("sprintf", errno, strerror(errno));

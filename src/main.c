@@ -67,6 +67,12 @@ int main(int argc, char** argv)
       0
     };
 
+    int status = GAME_load(&conf);
+    if (status != 0)
+    {
+      LOGGERR("GAME_load", 0, "unknown");
+    }
+
     argp_parse(&parser, argc, argv, 0, NULL, &conf);
 
     game = GAME_create(WINDOW_TITLE, &conf);
