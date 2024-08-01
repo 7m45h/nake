@@ -5,6 +5,8 @@
 #include "../window_manager/wm.h"
 #include "states.h"
 
+#define GAME_SAVE_FILE_PATH "./nake-save.txt"
+
 typedef struct
 {
   Window*            window;

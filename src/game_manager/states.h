@@ -14,6 +14,7 @@ typedef struct
   int grid_cell_count_x;
   int grid_cell_count_y;
   int   update_interval;
+  int      p_high_score;
 } STTiconf;
 
 typedef struct

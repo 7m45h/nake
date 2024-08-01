@@ -8,6 +8,7 @@
 
 #include "../logger.h"
 #include "helpers.h"
+#include "states.h"
 #include "gm.h"
 
 #define ONE_SEC_IN_MILI 1000.0f
@@ -29,7 +30,7 @@ Game* GAME_create(const char* title, STTiconf* conf)
     return NULL; 
   }
 
-  int entity_status = game_populate_entities(game, conf->grid_cell_size, conf->grid_cell_count_x, conf->grid_cell_count_y);
+  int entity_status = game_populate_entities(game, conf);
   if (entity_status != 0)
   {
     LOGGERR("game_populate_entities", 0, "");
@@ -81,6 +82,22 @@ void GAME_run(Game* game)
   if (game->interrupt)
   {
     LOGG("game loop interrupted!");
+  }
+  else
+  {
+    STTiconf conf = {
+      game->entities.grid->cell_size,
+      game->entities.grid->cell_count.x,
+      game->entities.grid->cell_count.y,
+      game->update_interval,
+      game->entities.hud.high_score
+    };
+
+    int status = game_save(&conf);
+    if (status != 0)
+    {
+      LOGGERR("game_save", status, "unknown");
+    }
   }
 }
 

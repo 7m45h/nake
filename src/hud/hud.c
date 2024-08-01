@@ -16,7 +16,7 @@
 static const SDL_Color color_black = { COLOR_BLACK, SDL_ALPHA_OPAQUE };
 static TTF_Font* font = NULL;
 
-int HUD_init(HUD* hud, int cs)
+int HUD_init(HUD* hud, int cs, int p_high_score)
 {
   font = TTF_OpenFont(FONT_PATH, cs * FONT_RATIO);
   if (font == NULL)
@@ -25,16 +25,20 @@ int HUD_init(HUD* hud, int cs)
     return 1;
   }
 
+  hud->high_score    = p_high_score;
   hud->score_surface = NULL;
   hud->score_board   = NULL;
 
   return 0;
 }
 
-int HUD_update_score_board(HUD* hud, SDL_Renderer* renderer, Grid* grid, int n_score, int n_hscore)
+int HUD_update_score_board(HUD* hud, SDL_Renderer* renderer, Grid* grid, int n_score)
 {
+  if (n_score > hud->high_score)
+    hud->high_score = n_score;
+
   char score_text[32] = "";
-  sprintf(score_text, "high score: %04d | score: %04d", n_hscore, n_score);
+  sprintf(score_text, "high score: %04d | score: %04d", hud->high_score, n_score);
 
   SDL_FreeSurface(hud->score_surface);
   hud->score_surface = NULL;

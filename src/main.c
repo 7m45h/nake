@@ -63,7 +63,8 @@ int main(int argc, char** argv)
       DEFAULT_GRID_CELL_SIZE,
       DEFAULT_GRID_CELL_COUNT_X,
       DEFAULT_GRID_CELL_COUNT_Y,
-      DEFAULT_UPDATE_INTERVAL
+      DEFAULT_UPDATE_INTERVAL,
+      0
     };
 
     argp_parse(&parser, argc, argv, 0, NULL, &conf);
