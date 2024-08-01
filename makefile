@@ -1,8 +1,13 @@
 CC := gcc
 CPPFLAGS := -MMD
-LINK_LIBS := SDL2_ttf json-c sdl2
-CFLAGS := -Wall -Wextra -march=native $(shell pkg-config --cflags ${LINK_LIBS})
-LDFLAGS := $(shell pkg-config --libs ${LINK_LIBS})
+LINK_LIBS := SDL2_ttf sdl2
+CFLAGS := -Wall -Wextra -march=native
+LDFLAGS := -lm
+
+ifdef LINK_LIBS
+CFLAGS += $(shell pkg-config --cflags ${LINK_LIBS})
+LDFLAGS += $(shell pkg-config --libs ${LINK_LIBS})
+endif
 
 SRC_DIR := src
 OBJ_DIR := obj
@@ -22,7 +27,7 @@ OBJ_DIR := $(addprefix ${FINAL_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${FINAL_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${FINAL_DIR}/,${BIN})
 else
-CFLAGS += -g
+CFLAGS += -Og -g
 OBJ_DIR := $(addprefix ${DEBUG_DIR}/,${OBJ_DIR})
 LIBS_DIRS := $(addprefix ${DEBUG_DIR}/,${LIBS_DIRS})
 BIN := $(addprefix ${DEBUG_DIR}/,${BIN})

@@ -1,71 +1,79 @@
-#include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_rect.h>
+#include <errno.h>
+#include <math.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <time.h>
 
 #include "../logger.h"
 #include "nake.h"
 
-#define INIT_NAKE_TAIL_LENGTH   128
-#define EXTEND_NAKE_TAIL_LENGTH  64
+#define TAIL_INIT_MAX_LEN 128
 
-static float nake_wraparound_right = 0;
-static float nake_wraparound_down  = 0;
-
-static SDL_FPoint tail_p_position = { 0, 0 };
-static SDL_FPoint tail_c_position = { 0, 0 };
-
-int NAKE_init(Nake* nake, Grid* grid)
+Nake* NAKE_create(Grid* grid)
 {
-  nake->rect.x = (rand() % grid->cell_count.x) * grid->cell_size + grid->inner_rect.x;
-  nake->rect.y = (rand() % grid->cell_count.y) * grid->cell_size + grid->inner_rect.y;
+  Nake* nake = malloc(sizeof(Nake));
+  if (nake == NULL)
+  {
+    LOGGERR("malloc", errno, strerror(errno));
+    return NULL;
+  }
+
+  nake->rect.x = roundf(grid->cell_count.x * 0.5) * grid->cell_size + grid->inner_rect.x;
+  nake->rect.y = roundf(grid->cell_count.y * 0.5) * grid->cell_size + grid->inner_rect.y;
   nake->rect.w = grid->cell_size;
   nake->rect.h = grid->cell_size;
 
-  nake->direction = SDLK_LEFT;
+  nake->p_position.x = 0;
+  nake->p_position.y = 0;
+  nake->direction    = SDLK_LEFT;
 
-  nake->score           = 0;
-  nake->max_tail_length = INIT_NAKE_TAIL_LENGTH;
-  nake->tail            = malloc(sizeof(Tail) * INIT_NAKE_TAIL_LENGTH);
+  nake->tail = malloc(sizeof(Tail) * TAIL_INIT_MAX_LEN);
   if (nake->tail == NULL)
   {
-    LOGG("malloc sizeof Tail returned NULL");
-    return 1;
+    LOGGERR("malloc", errno, strerror(errno));
+    NAKE_free(&nake);
+    return NULL;
   }
 
-  nake_wraparound_right = grid->inner_rect.x + grid->inner_rect.w - grid->cell_size;
-  nake_wraparound_down  = grid->inner_rect.y + grid->inner_rect.h - grid->cell_size;
+  nake->tail_max_len = TAIL_INIT_MAX_LEN;
+  nake->tail_len     = 0;
 
-  return 0;
+  return nake;
 }
 
-void NAKE_handle_grid_resize(Nake* nake, Grid* grid)
+void NAKE_counter_offset(Nake* nake, SDL_FPoint* offset)
 {
-  nake->rect.x += grid->offset.x;
-  nake->rect.y += grid->offset.y;
+  nake->rect.x += offset->x;
+  nake->rect.y += offset->y;
 
-  nake_wraparound_right = grid->inner_rect.x + grid->inner_rect.w - grid->cell_size;
-  nake_wraparound_down  = grid->inner_rect.y + grid->inner_rect.h - grid->cell_size;
+  for (size_t i = 0; i < nake->tail_len; i++)
+  {
+    nake->tail[i].x += offset->x;
+    nake->tail[i].y += offset->y;
+  }
 }
 
-void NAKE_update(Nake* nake, SDL_Keycode key, Grid* grid)
+void NAKE_update(Nake* nake, Grid* grid, SDL_Keycode key)
 {
   switch (key)
   {
     case SDLK_UP:
-    if (nake->direction != SDLK_DOWN) nake->direction = key;
+    if (nake->direction != SDLK_DOWN) nake->direction = SDLK_UP;
     break;
 
     case SDLK_DOWN:
-    if (nake->direction != SDLK_UP) nake->direction = key;
+    if (nake->direction != SDLK_UP) nake->direction = SDLK_DOWN;
     break;
 
     case SDLK_LEFT:
-    if (nake->direction != SDLK_RIGHT) nake->direction = key;
+    if (nake->direction != SDLK_RIGHT) nake->direction = SDLK_LEFT;
     break;
 
     case SDLK_RIGHT:
-    if (nake->direction != SDLK_LEFT) nake->direction = key;
+    if (nake->direction != SDLK_LEFT) nake->direction = SDLK_RIGHT;
     break;
   }
 
@@ -75,92 +83,88 @@ void NAKE_update(Nake* nake, SDL_Keycode key, Grid* grid)
   switch (nake->direction)
   {
     case SDLK_UP:
-    nake->rect.y -= grid->cell_size;
+    nake->rect.y -= nake->rect.w;
     break;
 
     case SDLK_DOWN:
-    nake->rect.y += grid->cell_size;
+    nake->rect.y += nake->rect.w;
     break;
 
     case SDLK_LEFT:
-    nake->rect.x -= grid->cell_size;
+    nake->rect.x -= nake->rect.w;
     break;
 
     case SDLK_RIGHT:
-    nake->rect.x += grid->cell_size;
+    nake->rect.x += nake->rect.w;
     break;
   }
 
   if (nake->rect.x < grid->inner_rect.x)
-  {
-    nake->rect.x = nake_wraparound_right;
-  }
-  else if ((nake->rect.x + grid->cell_size) > grid->inner_rect_xtyt.x)
-  {
+    nake->rect.x = grid->inner_rect_bound.x - grid->cell_size;
+  else if (nake->rect.x + grid->cell_size > grid->inner_rect_bound.x)
     nake->rect.x = grid->inner_rect.x;
-  }
 
   if (nake->rect.y < grid->inner_rect.y)
-  {
-    nake->rect.y = nake_wraparound_down;
-  }
-  else if ((nake->rect.y + grid->cell_size) > grid->inner_rect_xtyt.y)
-  {
+    nake->rect.y = grid->inner_rect_bound.y - grid->cell_size;
+  else if (nake->rect.y + grid->cell_size > grid->inner_rect_bound.y)
     nake->rect.y = grid->inner_rect.y;
-  }
 
-  tail_p_position.x = nake->p_position.x;
-  tail_p_position.y = nake->p_position.y;
-  for (int i = 0; i < nake->score; i++)
+  SDL_FPoint c_position;
+  for (size_t i = 0; i < nake->tail_len; i++)
   {
-    tail_c_position.x = nake->tail[i].x;
-    tail_c_position.y = nake->tail[i].y;
-    nake->tail[i].x = tail_p_position.x;
-    nake->tail[i].y = tail_p_position.y;
+    c_position.x = nake->tail[i].x;
+    c_position.y = nake->tail[i].y;
 
-    if (nake->rect.x == nake->tail[i].x && nake->rect.y == nake->tail[i].y)
-    {
-      LOGG("touch");
-      nake->score = i;
-    }
+    nake->tail[i].x = nake->p_position.x;
+    nake->tail[i].y = nake->p_position.y;
 
-    tail_p_position.x = tail_c_position.x;
-    tail_p_position.y = tail_c_position.y;
+    nake->p_position.x = c_position.x;
+    nake->p_position.y = c_position.y;
   }
 }
 
-bool NAKE_eat_apple(Nake* nake, Apple* apple)
+FEAST NAKE_eat_apple(Nake* nake, Apple* apple)
 {
   if (nake->rect.x == apple->x && nake->rect.y == apple->y)
   {
-    if (nake->score >= nake->max_tail_length)
+    if (nake->tail_len >= nake->tail_max_len)
     {
-      int new_max_tail_length = nake->max_tail_length + EXTEND_NAKE_TAIL_LENGTH;
-      Tail* new_tail          = realloc(nake->tail, sizeof(Tail) * new_max_tail_length);
+      size_t new_max_tail_len = nake->tail_max_len + TAIL_INIT_MAX_LEN;
+      Tail* new_tail          = realloc(nake->tail, new_max_tail_len);
+
       if (new_tail == NULL)
       {
-        LOGG("nake tail extend failed");
-        return true;
+        LOGGERR("realloc", errno, strerror(errno));
+        return ERROR;
       }
 
-      LOGG("nake tail extend succesfull");
-      nake->max_tail_length = new_max_tail_length;
-      nake->tail            = new_tail;
+      nake->tail_max_len = new_max_tail_len;
+      nake->tail         = new_tail;
     }
 
-    nake->tail[nake->score].x = nake->p_position.x;
-    nake->tail[nake->score].y = nake->p_position.y;
-    nake->tail[nake->score].w = nake->rect.w;
-    nake->tail[nake->score].h = nake->rect.w;
+    nake->tail[nake->tail_len].x = nake->p_position.x;
+    nake->tail[nake->tail_len].y = nake->p_position.y;
+    nake->tail[nake->tail_len].w = nake->rect.w;
+    nake->tail[nake->tail_len].h = nake->rect.h;
 
-    nake->score++;
-    return true;
+    nake->tail_len++;
+
+    return ATE;
   }
 
-  return false;
+  return NOT_ATE;
 }
 
-void NAKE_deinit(Nake* nake)
+void NAKE_free(Nake** nake)
 {
-  free(nake->tail);
+  if (nake != NULL && *nake != NULL)
+  {
+    free((*nake)->tail);
+    (*nake)->tail_max_len = 0;
+    (*nake)->tail_len     = 0;
+    (*nake)->tail         = NULL;
+
+    free(*nake);
+    *nake = NULL;
+  }
 }
