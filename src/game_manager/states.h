@@ -10,6 +10,14 @@
 
 typedef struct
 {
+  int    grid_cell_size;
+  int grid_cell_count_x;
+  int grid_cell_count_y;
+  int   update_interval;
+} STTiconf;
+
+typedef struct
+{
   bool          quit;
   bool window_resize;
   SDL_Keycode    key;

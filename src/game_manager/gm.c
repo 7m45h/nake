@@ -12,7 +12,7 @@
 
 #define ONE_SEC_IN_MILI 1000.0f
 
-Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy, int update_interval)
+Game* GAME_create(const char* title, STTiconf* conf)
 {
   Game* game = calloc(1, sizeof(Game));
   if (game == NULL)
@@ -29,7 +29,7 @@ Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy, int update_
     return NULL; 
   }
 
-  int entity_status = game_populate_entities(game, g_cs, g_ccx, g_ccy);
+  int entity_status = game_populate_entities(game, conf->grid_cell_size, conf->grid_cell_count_x, conf->grid_cell_count_y);
   if (entity_status != 0)
   {
     LOGGERR("game_populate_entities", 0, "");
@@ -40,7 +40,7 @@ Game* GAME_create(const char* title, int g_cs, int g_ccx, int g_ccy, int update_
   game->running             = false;
   game->interrupt           = false;
   game->event_poll_interval = ONE_SEC_IN_MILI / game->window->refresh_rate;
-  game->update_interval     = ONE_SEC_IN_MILI / update_interval;
+  game->update_interval     = ONE_SEC_IN_MILI / conf->update_interval;
 
   return game;
 }

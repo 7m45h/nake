@@ -2,6 +2,7 @@
 #include <time.h>
 
 #include "game_manager/gm.h"
+#include "game_manager/states.h"
 #include "logger.h"
 
 #define WINDOW_TITLE "nake"
@@ -13,7 +14,19 @@
 
 int main(void)
 {
-  Game* game = GAME_create(WINDOW_TITLE, DEFAULT_GRID_CELL_SIZE, DEFAULT_GRID_CELL_COUNT_X, DEFAULT_GRID_CELL_COUNT_Y, DEFAULT_UPDATE_INTERVAL);
+  Game* game = NULL;
+
+  {
+    STTiconf conf = {
+      DEFAULT_GRID_CELL_SIZE,
+      DEFAULT_GRID_CELL_COUNT_X,
+      DEFAULT_GRID_CELL_COUNT_Y,
+      DEFAULT_UPDATE_INTERVAL
+    };
+
+    game = GAME_create(WINDOW_TITLE, &conf);
+  }
+
   if (game == NULL)
   {
     LOGGERR("GAME_create", 0, "");
