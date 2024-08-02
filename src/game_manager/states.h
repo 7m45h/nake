@@ -19,13 +19,6 @@ typedef struct
 
 typedef struct
 {
-  bool          quit;
-  bool window_resize;
-  SDL_Keycode    key;
-} STTevents;
-
-typedef struct
-{
   Grid*  grid;
   Nake*  nake;
   Apple apple;

@@ -94,8 +94,7 @@ void GAME_run(Game* game)
     if (event_ticker >= game->event_poll_interval)
     {
       event_ticker = 0;
-      WINDOW_update_events(game->window, &game->events);
-      game_handle_events(game);
+      game_handle_window_events(game);
     }
     else event_ticker += frame_duration;
 

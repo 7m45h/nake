@@ -65,23 +65,60 @@ void game_depopulate_entities(Game* game)
   GRID_destroy(&game->entities.grid);
 }
 
-void game_handle_events(Game* game)
+void game_handle_window_events(Game* game)
 {
-  if (game->events.quit || game->events.key == SDLK_q) game->running = false;
-
-  if (game->events.window_resize)
+  while (SDL_PollEvent(&game->window->event))
   {
-    GRID_align_center(game->entities.grid, &game->window->dimensions);
-    NAKE_counter_offset(game->entities.nake, &game->entities.grid->offset);
-    APPLE_counter_offset(&game->entities.apple, &game->entities.grid->offset);
-    HUD_counter_offset(game->entities.hud, &game->entities.grid->offset);
-    game->events.window_resize = false;
+    switch (game->window->event.type)
+    {
+      case SDL_QUIT:
+      game->running = false;
+      break;
+
+      case SDL_KEYDOWN:
+      switch (game->window->event.key.keysym.sym)
+      {
+        case SDLK_q:
+        game->running = false;
+        break;
+
+        case SDLK_f:
+        int status = WINDOW_toggle_fullscreen(game->window);
+        if (status != 0)
+        {
+          LOGGPERR("WINDOW_toggle_fullscreen");
+          game->interrupt = true;
+        }
+        break;
+
+        default:
+        game->current_key = game->window->event.key.keysym.sym;
+        break;
+      }
+      break;
+
+      case SDL_WINDOWEVENT:
+      switch (game->window->event.window.event)
+      {
+        case SDL_WINDOWEVENT_RESIZED:
+        case SDL_WINDOWEVENT_SIZE_CHANGED:
+        game->window->dimensions.x     = game->window->event.window.data1;
+        game->window->dimensions.y     = game->window->event.window.data2;
+
+        GRID_align_center(game->entities.grid, &game->window->dimensions);
+        NAKE_counter_offset(game->entities.nake, &game->entities.grid->offset);
+        APPLE_counter_offset(&game->entities.apple, &game->entities.grid->offset);
+        HUD_counter_offset(game->entities.hud, &game->entities.grid->offset);
+        break;
+      }
+      break;
+    }
   }
 }
 
 void game_update(Game* game)
 {
-  NAKE_update(game->entities.nake, game->entities.grid, game->events.key);
+  NAKE_update(game->entities.nake, game->entities.grid, game->current_key);
   FEAST feast = NAKE_eat_apple(game->entities.nake, &game->entities.apple);
   if (feast == ATE)
   {

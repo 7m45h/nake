@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL_keycode.h>
 #include <stdbool.h>
 
 #include "../window_manager/wm.h"
@@ -10,7 +11,7 @@
 typedef struct
 {
   Window*            window;
-  STTevents          events;
+  SDL_Keycode   current_key;
   STTentities      entities;
   bool              running;
   bool            interrupt;

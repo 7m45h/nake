@@ -2,6 +2,7 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
@@ -70,36 +71,30 @@ Window* WINDOW_create(const char* title)
     return NULL;
   }
 
+  window->windowed = true;
+
   return window;
 }
 
-void WINDOW_update_events(Window* window, STTevents* events)
+int WINDOW_toggle_fullscreen(Window* window)
 {
-  while (SDL_PollEvent(&window->event))
+  window->windowed = !window->windowed;
+  int status = SDL_SetWindowFullscreen(window->window, window->windowed ? 0 : SDL_WINDOW_FULLSCREEN);
+  if (status != 0)
   {
-    switch (window->event.type)
-    {
-      case SDL_QUIT:
-      events->quit = true;
-      break;
-
-      case SDL_KEYDOWN:
-      events->key = window->event.key.keysym.sym;
-      break;
-
-      case SDL_WINDOWEVENT:
-      switch (window->event.window.event)
-      {
-        case SDL_WINDOWEVENT_RESIZED:
-        case SDL_WINDOWEVENT_SIZE_CHANGED:
-        window->dimensions.x     = window->event.window.data1;
-        window->dimensions.y     = window->event.window.data2;
-        events->window_resize    = true;
-        break;
-      }
-      break;
-    }
+    LOGGERR("SDL_SetWindowFullscreen", status, SDL_GetError());
+    window->windowed = !window->windowed;
+    return 1;
   }
+
+  status = SDL_ShowCursor(window->windowed ? SDL_ENABLE : SDL_DISABLE);
+  if (status < 0)
+  {
+    LOGGERR("SDL_ShowCursor", status, SDL_GetError());
+    return 1;
+  }
+
+  return 0;
 }
 
 void WINDOW_update_screen(Window* window, STTentities* entities)
