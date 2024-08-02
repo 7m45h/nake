@@ -16,7 +16,7 @@
 #define FONT_PATH  "./assets/terminus.ttf"
 
 #define SCORE_FONT_SIZE  32
-#define HSCORE_FONT_SIZE 18
+#define HSCORE_FONT_SIZE 20
 
 static const SDL_Color color_black = { COLOR_BLACK, SDL_ALPHA_OPAQUE };
 
