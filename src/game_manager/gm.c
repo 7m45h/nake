@@ -58,7 +58,7 @@ Game* GAME_create(const char* title, STTiconf* conf)
   game->window = WINDOW_create(title);
   if (game->window == NULL)
   {
-    LOGGERR("WINDOW_create", 0, "");
+    LOGGPERR("WINDOW_create");
     GAME_destroy(&game);
     return NULL; 
   }
@@ -66,7 +66,7 @@ Game* GAME_create(const char* title, STTiconf* conf)
   int entity_status = game_populate_entities(game, conf);
   if (entity_status != 0)
   {
-    LOGGERR("game_populate_entities", 0, "");
+    LOGGPERR("game_populate_entities");
     GAME_destroy(&game);
     return NULL;
   }

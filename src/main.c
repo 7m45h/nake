@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 
   if (game == NULL)
   {
-    LOGGERR("GAME_create", 0, "");
+    LOGGPERR("GAME_create");
     return EXIT_FAILURE;
   }
 

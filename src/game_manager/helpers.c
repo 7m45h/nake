@@ -16,7 +16,7 @@ int game_populate_entities(Game* game, STTiconf* conf)
   game->entities.grid = GRID_create(&game->window->dimensions, conf->grid_cell_size, conf->grid_cell_count_x, conf->grid_cell_count_y);
   if (game->entities.grid == NULL)
   {
-    LOGGERR("GRID_create", 0, "");
+    LOGGPERR("GRID_create");
     game_depopulate_entities(game);
     return 1;
   }
@@ -24,7 +24,7 @@ int game_populate_entities(Game* game, STTiconf* conf)
   game->entities.nake = NAKE_create(game->entities.grid);
   if (game->entities.nake == NULL)
   {
-    LOGGERR("NAKE_create", 0, "");
+    LOGGPERR("NAKE_create");
     game_depopulate_entities(game);
     return 1;
   }
@@ -42,7 +42,7 @@ int game_populate_entities(Game* game, STTiconf* conf)
   int hud_status = HUD_update_score_board_score(game->entities.hud, game->window->renderer, game->entities.grid, 0);
   if (hud_status != 0)
   {
-    LOGGERR("HUD_update_score_board_score", 0, "");
+    LOGGPERR("HUD_update_score_board_score");
     game_depopulate_entities(game);
     return 1;
   }
@@ -50,7 +50,7 @@ int game_populate_entities(Game* game, STTiconf* conf)
   hud_status = HUD_update_score_board_hscore(game->entities.hud, game->window->renderer, game->entities.grid, conf->p_high_score);
   if (hud_status != 0)
   {
-    LOGGERR("HUD_update_score_board_hscore", 0, "");
+    LOGGPERR("HUD_update_score_board_hscore");
     game_depopulate_entities(game);
     return 1;
   }
