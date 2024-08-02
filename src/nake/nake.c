@@ -130,7 +130,7 @@ FEAST NAKE_eat_apple(Nake* nake, Apple* apple)
     if (nake->tail_len >= nake->tail_max_len)
     {
       size_t new_max_tail_len = nake->tail_max_len + TAIL_INIT_MAX_LEN;
-      Tail* new_tail          = realloc(nake->tail, new_max_tail_len);
+      Tail* new_tail          = realloc(nake->tail, sizeof(Tail) * new_max_tail_len);
 
       if (new_tail == NULL)
       {
