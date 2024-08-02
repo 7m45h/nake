@@ -56,6 +56,8 @@ static struct argp parser = { options, parse_opt, NULL, doc, NULL, NULL, NULL };
 
 int main(int argc, char** argv)
 {
+  srand(time(NULL));
+
   Game* game = NULL;
 
   {
