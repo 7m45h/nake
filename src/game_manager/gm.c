@@ -13,8 +13,9 @@
 #include "helpers.h"
 #include "states.h"
 
-#define BASE_OF_HEX     16
-#define ONE_SEC_IN_MILI 1000.0f
+#define SAVE_HEX_STR_LEN   45
+#define BASE_OF_HEX        16
+#define ONE_SEC_IN_MILI  1000.0f
 
 int GAME_load(STTiconf* conf)
 {
@@ -23,6 +24,13 @@ int GAME_load(STTiconf* conf)
   if (hex_str == NULL)
   {
     LOGGERR("FM_read", 0, "unknown");
+    return 1;
+  }
+
+  if (hex_str_len != SAVE_HEX_STR_LEN)
+  {
+    LOGG("save file length not match | expected: %02d got: %02ld", SAVE_HEX_STR_LEN, hex_str_len);
+    free(hex_str);
     return 1;
   }
 
