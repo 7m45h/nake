@@ -57,7 +57,12 @@ HUD* HUD_init(int p_high_score)
 int HUD_update_score_board_score(HUD* hud, SDL_Renderer* renderer, Grid* grid, int n_score)
 {
   char s_text[32] = "";
-  sprintf(s_text, "score: %04d", n_score);
+  int status = sprintf(s_text, "score: %04d", n_score);
+  if (status < 0)
+  {
+    LOGGERR("sprintf", errno, strerror(errno));
+    return 1;
+  }
 
   SDL_FreeSurface(hud->score_board.s_surface);
   hud->score_board.s_surface = NULL;
@@ -90,7 +95,12 @@ int HUD_update_score_board_hscore(HUD* hud, SDL_Renderer* renderer, Grid* grid, 
 {
   hud->score_board.high_score = n_score;
   char hs_text[32] = "";
-  sprintf(hs_text, "high score: %04d", hud->score_board.high_score);
+  int status = sprintf(hs_text, "high score: %04d", hud->score_board.high_score);
+  if (status < 0)
+  {
+    LOGGERR("sprintf", errno, strerror(errno));
+    return 1;
+  }
 
   SDL_FreeSurface(hud->score_board.hs_surface);
   hud->score_board.hs_surface = NULL;

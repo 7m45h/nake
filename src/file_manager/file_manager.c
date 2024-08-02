@@ -62,11 +62,11 @@ void* FM_read(const char* file_path, size_t* count, size_t one_item_size, bool s
   {
     if (feof(file))
     {
-      LOGGERR("fread", 0, "unexpected end of file");
+      LOGGERR("fread", 9999, "unexpected end of file");
     }
     else if (ferror(file))
     {
-      LOGGERR("fread", 0, "error while reading file");
+      LOGGERR("fread", 9999, "error while reading file");
     }
 
     free(data.raw);

@@ -95,6 +95,7 @@ void GAME_run(Game* game)
     {
       event_ticker = 0;
       game_handle_window_events(game);
+      if (game->interrupt) break;
     }
     else event_ticker += frame_duration;
 

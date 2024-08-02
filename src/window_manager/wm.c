@@ -37,7 +37,7 @@ Window* WINDOW_create(const char* title)
   int ttf_status = TTF_Init();
   if (ttf_status != 0)
   {
-    LOGGERR("TTF_Init", 0, TTF_GetError());
+    LOGGERR("TTF_Init", ttf_status, TTF_GetError());
     WINDOW_destroy(&window);
     return NULL;
   }
@@ -58,7 +58,7 @@ Window* WINDOW_create(const char* title)
   window->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window->dimensions.x, window->dimensions.y, SDL_WINDOW_RESIZABLE);
   if (window->window == NULL)
   {
-    LOGGERR("SDL_CreateWindow", 0, SDL_GetError());
+    LOGGERR("SDL_CreateWindow", 9999, SDL_GetError());
     WINDOW_destroy(&window);
     return NULL;
   }
@@ -66,7 +66,7 @@ Window* WINDOW_create(const char* title)
   window->renderer = SDL_CreateRenderer(window->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (window->renderer == NULL)
   {
-    LOGGERR("SDL_CreateRenderer", 0, SDL_GetError());
+    LOGGERR("SDL_CreateRenderer", 9999, SDL_GetError());
     WINDOW_destroy(&window);
     return NULL;
   }
