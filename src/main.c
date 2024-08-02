@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     int status = GAME_load(&conf);
     if (status != 0)
     {
-      LOGGERR("GAME_load", 0, "unknown");
+      LOGGPERR("GAME_load");
     }
 
     argp_parse(&parser, argc, argv, 0, NULL, &conf);

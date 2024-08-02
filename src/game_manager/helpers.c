@@ -98,7 +98,7 @@ int game_save(STTiconf* conf)
   status = FM_write(GAME_SAVE_FILE_PATH, data_str, data_str_len, sizeof(char));
   if (status != 0)
   {
-    LOGGERR("FM_write", status, "unknown");
+    LOGGPERR("FM_write");
     return 1;
   }
 

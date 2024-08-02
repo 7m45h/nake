@@ -60,7 +60,15 @@ void* FM_read(const char* file_path, size_t* count, size_t one_item_size, bool s
   file_status = fread(data.raw, 1, file_length, file);
   if (file_status != file_length)
   {
-    LOGGERR("fread", 0, "unknown");
+    if (feof(file))
+    {
+      LOGGERR("fread", 0, "unexpected end of file");
+    }
+    else if (ferror(file))
+    {
+      LOGGERR("fread", 0, "error while reading file");
+    }
+
     free(data.raw);
     fclose(file);
     return NULL;

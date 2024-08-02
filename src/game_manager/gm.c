@@ -23,7 +23,7 @@ int GAME_load(STTiconf* conf)
   char* hex_str      = FM_read(GAME_SAVE_FILE_PATH, &hex_str_len, sizeof(char), true);
   if (hex_str == NULL)
   {
-    LOGGERR("FM_read", 0, "unknown");
+    LOGGPERR("FM_read");
     return 1;
   }
 
@@ -129,7 +129,7 @@ void GAME_run(Game* game)
     int status = game_save(&conf);
     if (status != 0)
     {
-      LOGGERR("game_save", status, "unknown");
+      LOGGPERR("game_save");
     }
   }
 }
