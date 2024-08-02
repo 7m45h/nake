@@ -31,18 +31,26 @@ int game_populate_entities(Game* game, STTiconf* conf)
 
   APPLE_init(&game->entities.apple, game->entities.grid);
 
-  int hud_status = HUD_init(&game->entities.hud, game->entities.grid->cell_size, conf->p_high_score);
-  if (hud_status != 0)
+  game->entities.hud = HUD_init(conf->p_high_score);
+  if (game->entities.hud == NULL)
   {
-    LOGGERR("HUD_init", 0, "");
+    LOGGPERR("HUD_init");
     game_depopulate_entities(game);
     return 1;
   }
 
-  hud_status = HUD_update_score_board(&game->entities.hud, game->window->renderer, game->entities.grid, 0);
+  int hud_status = HUD_update_score_board_score(game->entities.hud, game->window->renderer, game->entities.grid, 0);
   if (hud_status != 0)
   {
-    LOGGERR("HUD_update_score_board", 0, "");
+    LOGGERR("HUD_update_score_board_score", 0, "");
+    game_depopulate_entities(game);
+    return 1;
+  }
+
+  hud_status = HUD_update_score_board_hscore(game->entities.hud, game->window->renderer, game->entities.grid, conf->p_high_score);
+  if (hud_status != 0)
+  {
+    LOGGERR("HUD_update_score_board_hscore", 0, "");
     game_depopulate_entities(game);
     return 1;
   }
@@ -66,7 +74,7 @@ void game_handle_events(Game* game)
     GRID_align_center(game->entities.grid, &game->window->dimensions);
     NAKE_counter_offset(game->entities.nake, &game->entities.grid->offset);
     APPLE_counter_offset(&game->entities.apple, &game->entities.grid->offset);
-    HUD_counter_offset(&game->entities.hud, &game->entities.grid->offset);
+    HUD_counter_offset(game->entities.hud, &game->entities.grid->offset);
     game->events.window_resize = false;
   }
 }
@@ -78,8 +86,13 @@ void game_update(Game* game)
   if (feast == ATE)
   {
     APPLE_set_rand_position(&game->entities.apple, game->entities.grid);
-    int hud_status = HUD_update_score_board(&game->entities.hud, game->window->renderer, game->entities.grid, game->entities.nake->tail_len);
+    int hud_status = HUD_update_score_board_score(game->entities.hud, game->window->renderer, game->entities.grid, game->entities.nake->tail_len);
     if (hud_status != 0) game->interrupt = true;
+    else if ((int) game->entities.nake->tail_len > game->entities.hud->score_board.high_score)
+    {
+      hud_status = HUD_update_score_board_hscore(game->entities.hud, game->window->renderer, game->entities.grid, game->entities.nake->tail_len);
+      if (hud_status != 0) game->interrupt = true;
+    }
   }
   else if (feast == ERROR) game->interrupt = true;
 }

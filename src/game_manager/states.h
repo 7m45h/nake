@@ -29,5 +29,5 @@ typedef struct
   Grid*  grid;
   Nake*  nake;
   Apple apple;
-  HUD     hud;
+  HUD*    hud;
 } STTentities;

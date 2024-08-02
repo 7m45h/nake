@@ -5,6 +5,6 @@
   fprintf(stderr, __VA_ARGS__); \
   putchar('\n')
 
-#define LOGGERR(fname, errnum, errstr) LOGG("%8s failed! |%04d| -> %s", fname, errnum, errstr)
+#define LOGGERR(fname, errnum, errstr) LOGG("%16s failed! |%04d| -> %s", fname, errnum, errstr)
 
 #define LOGGPERR(fname) LOGGERR(fname, 9999, "cascaded error! please look for errors before")

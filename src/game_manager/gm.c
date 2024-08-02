@@ -123,7 +123,7 @@ void GAME_run(Game* game)
       game->entities.grid->cell_count.x,
       game->entities.grid->cell_count.y,
       ONE_SEC_IN_MILI / game->update_interval,
-      game->entities.hud.high_score
+      game->entities.hud->score_board.high_score
     };
 
     int status = game_save(&conf);

@@ -136,7 +136,8 @@ void WINDOW_update_screen(Window* window, STTentities* entities)
   SDL_RenderFillRectF(window->renderer, &entities->apple);
 
   // hud
-  SDL_RenderCopyF(window->renderer, entities->hud.score_board, NULL, &entities->hud.score_board_rect);
+  SDL_RenderCopyF(window->renderer, entities->hud->score_board.s_texture, NULL, &entities->hud->score_board.s_rect);
+  SDL_RenderCopyF(window->renderer, entities->hud->score_board.hs_texture, NULL, &entities->hud->score_board.hs_rect);
 
   SDL_RenderPresent(window->renderer);
 }
