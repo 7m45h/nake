@@ -32,15 +32,17 @@ endif
 MODULE_DIRS := $(addprefix ${BUILD_DIR}/,${MODULE_DIRS})
 BIN := $(addprefix ${BUILD_DIR}/,${PROJECT_NAME})
 
-${BIN}: $(addprefix ${BUILD_DIR}/,${OBJS}) | ${BUILD_DIR}
+${BIN}: $(addprefix ${BUILD_DIR}/,${OBJS}) | ${BUILD_DIR} ${MODULE_DIRS}
+	@printf "\n%-17s%16s @ %s\n" "build complete!" "executable" $@
 ifndef LDFLAGS
-	${CC} ${CFLAGS} -o $@ $^
+	@${CC} ${CFLAGS} -o $@ $^
 else
-	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
+	@${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 endif
 
-${BUILD_DIR}/%.o: ${SOURCE_DIR}/%.c | ${MODULE_DIRS}
-	${CC} ${CPPFLAGS} ${CFLAGS} -o $@ -c $<
+${BUILD_DIR}/%.o: ${SOURCE_DIR}/%.c | ${BUILD_DIR} ${MODULE_DIRS}
+	@printf "%-32s -> %s\n" $< $@
+	@${CC} ${CPPFLAGS} ${CFLAGS} -o $@ -c $<
 
 ${MODULE_DIRS}: | ${BUILD_DIR}
 	@mkdir $@
