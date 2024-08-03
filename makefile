@@ -1,59 +1,59 @@
 CC := gcc
-CPPFLAGS := -MMD
-LINK_LIBS := SDL2_ttf sdl2
+CPPFLAGS := -MD -MMD
 CFLAGS := -Wall -Wextra -march=native
 LDFLAGS := -lm
+LIBS := sdl2 SDL2_ttf
 
-ifdef LINK_LIBS
-CFLAGS += $(shell pkg-config --cflags ${LINK_LIBS})
-LDFLAGS += $(shell pkg-config --libs ${LINK_LIBS})
+ifdef LIBS
+CFLAGS += $(shell pkg-config --cflags ${LIBS})
+LDFLAGS += $(shell pkg-config --libs ${LIBS})
 endif
 
-SRC_DIR := src
-OBJ_DIR := obj
-LIBS_DIRS := $(patsubst ${SRC_DIR}/%,${OBJ_DIR}/%,$(shell find ${SRC_DIR} -mindepth 1 -type d))
+SOURCE_DIR := ./src
+BUILD_BASE_DIR := ./build
+DEBUG_DIR := ${BUILD_BASE_DIR}/debug
+FINAL_DIR := ${BUILD_BASE_DIR}/final
+PROJECT_NAME := le_nake
 
-BUILD_DIR := build
-DEBUG_DIR := ${BUILD_DIR}/debug
-FINAL_DIR := ${BUILD_DIR}/final
-
-SRCS := $(patsubst ./${SRC_DIR}/%,%,$(shell find -type f -name "*.c"))
+MODULE_DIRS := $(patsubst ${SOURCE_DIR}/%,%,$(shell find ${SOURCE_DIR} -mindepth 1 -type d))
+SRCS := $(patsubst ${SOURCE_DIR}/%,%,$(shell find ${SOURCE_DIR} -type f -name "*.c"))
 OBJS := $(patsubst %.c,%.o,${SRCS})
-BIN := $(shell basename ${CURDIR})
 
-ifeq (${MODE}, final)
+ifeq (${MODE},final)
+MODE := FINAL
 CFLAGS += -Ofast -s
-OBJ_DIR := $(addprefix ${FINAL_DIR}/,${OBJ_DIR})
-LIBS_DIRS := $(addprefix ${FINAL_DIR}/,${LIBS_DIRS})
-BIN := $(addprefix ${FINAL_DIR}/,${BIN})
+BUILD_DIR := ${FINAL_DIR}
 else
+MODE := DEBUG
 CFLAGS += -Og -g
-OBJ_DIR := $(addprefix ${DEBUG_DIR}/,${OBJ_DIR})
-LIBS_DIRS := $(addprefix ${DEBUG_DIR}/,${LIBS_DIRS})
-BIN := $(addprefix ${DEBUG_DIR}/,${BIN})
+BUILD_DIR := ${DEBUG_DIR}
 endif
 
-${BIN}: $(addprefix ${OBJ_DIR}/,${OBJS}) | ${BUILD_DIR} ${DEBUG_DIR} ${FINAL_DIR} ${LIBS_DIRS}
+MODULE_DIRS := $(addprefix ${BUILD_DIR}/,${MODULE_DIRS})
+BIN := $(addprefix ${BUILD_DIR}/,${PROJECT_NAME})
+
+${BIN}: $(addprefix ${BUILD_DIR}/,${OBJS}) | ${BUILD_DIR}
 ifndef LDFLAGS
 	${CC} ${CFLAGS} -o $@ $^
 else
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 endif
 
-${OBJ_DIR}/%.o: ${SRC_DIR}/%.c | ${OBJ_DIR} ${LIBS_DIRS}
+${BUILD_DIR}/%.o: ${SOURCE_DIR}/%.c | ${MODULE_DIRS}
 	${CC} ${CPPFLAGS} ${CFLAGS} -o $@ -c $<
 
-${BUILD_DIR} ${DEBUG_DIR} ${FINAL_DIR}:
-	mkdir $@
+${MODULE_DIRS}: | ${BUILD_DIR}
+	@mkdir $@
 
-${LIBS_DIRS}: | ${OBJ_DIR}
-	mkdir $@
+${BUILD_DIR}: | ${BUILD_BASE_DIR}
+	@mkdir $@
 
-${OBJ_DIR}: | ${BUILD_DIR} ${DEBUG_DIR} ${FINAL_DIR}
-	mkdir $@
+${BUILD_BASE_DIR}:
+	@mkdir $@
 
 .PHONY: clean
 clean:
-	rm -r $(wildcard ${DEBUG_DIR}/*) $(wildcard ${FINAL_DIR}/*)
+	@if [ -d ${BUILD_BASE_DIR} ]; then rm -r ${BUILD_BASE_DIR}; fi
+	@echo clean!
 
 -include $(addprefix ${OBJ_DIR}/,$(patsubst %.o,%.d,${OBJS}))
