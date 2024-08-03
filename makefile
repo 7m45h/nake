@@ -1,5 +1,5 @@
 CC := gcc
-CPPFLAGS := -MD -MMD
+CPPFLAGS := -MMD
 CFLAGS := -Wall -Wextra -march=native
 LDFLAGS := -lm
 LIBS := sdl2 SDL2_ttf
